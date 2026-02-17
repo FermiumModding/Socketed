@@ -18,10 +18,10 @@ public class SocketableConfig {
 	public static final Map<String, SocketableType> forcedItemTypes = new HashMap<>();
 	
 	static {
-		SocketableConfig.defaultItemTypes.put("HELMET", new SocketableType(v -> v instanceof ItemArmor && ((ItemArmor)v).getEquipmentSlot().equals(EntityEquipmentSlot.HEAD)));
-		SocketableConfig.defaultItemTypes.put("CHESTPLATE", new SocketableType(v -> v instanceof ItemArmor && ((ItemArmor)v).getEquipmentSlot().equals(EntityEquipmentSlot.CHEST)));
-		SocketableConfig.defaultItemTypes.put("LEGGINGS", new SocketableType(v -> v instanceof ItemArmor && ((ItemArmor)v).getEquipmentSlot().equals(EntityEquipmentSlot.LEGS)));
-		SocketableConfig.defaultItemTypes.put("BOOTS", new SocketableType(v -> v instanceof ItemArmor && ((ItemArmor)v).getEquipmentSlot().equals(EntityEquipmentSlot.FEET)));
+		SocketableConfig.defaultItemTypes.put("HELMET", new SocketableType(v -> v instanceof ItemArmor && ((ItemArmor)v).armorType.equals(EntityEquipmentSlot.HEAD)));
+		SocketableConfig.defaultItemTypes.put("CHESTPLATE", new SocketableType(v -> v instanceof ItemArmor && ((ItemArmor)v).armorType.equals(EntityEquipmentSlot.CHEST)));
+		SocketableConfig.defaultItemTypes.put("LEGGINGS", new SocketableType(v -> v instanceof ItemArmor && ((ItemArmor)v).armorType.equals(EntityEquipmentSlot.LEGS)));
+		SocketableConfig.defaultItemTypes.put("BOOTS", new SocketableType(v -> v instanceof ItemArmor && ((ItemArmor)v).armorType.equals(EntityEquipmentSlot.FEET)));
 		SocketableConfig.defaultItemTypes.put("SWORD", new SocketableType(v -> v instanceof ItemSword));
 		SocketableConfig.defaultItemTypes.put("FISHING_ROD", new SocketableType(v -> v instanceof ItemFishingRod));
 		SocketableConfig.defaultItemTypes.put("BOW", new SocketableType(v -> v instanceof ItemBow));
