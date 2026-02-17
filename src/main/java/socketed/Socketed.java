@@ -1,5 +1,6 @@
 package socketed;
 
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
@@ -20,6 +21,7 @@ import socketed.api.common.capabilities.socketable.CapabilitySocketableHandler;
 import socketed.common.command.AddSocketCommand;
 import socketed.common.config.JsonConfig;
 import socketed.common.container.GuiHandlerSocketing;
+import socketed.common.init.ModBlocks;
 import socketed.common.init.ModItems;
 import socketed.common.init.ModRecipes;
 import socketed.common.loot.LootFunctionAddSocketsRandomly;
@@ -74,6 +76,11 @@ public class Socketed {
         @SubscribeEvent
         public static void registerItems(RegistryEvent.Register<Item> event) {
             ModItems.registerItems(event.getRegistry());
+        }
+
+        @SubscribeEvent
+        public static void registerBlocks(RegistryEvent.Register<Block> event) {
+            ModBlocks.registerBlocks(event.getRegistry());
         }
 
         @SubscribeEvent

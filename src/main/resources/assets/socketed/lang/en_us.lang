@@ -1,3 +1,5 @@
+tile.socketed.socket_block.name=Socketing Block
+
 item.socketed.socket_tool.tooltip=Used to add and remove socketed gems from tools and armor
 item.socketed.socket_tool.name=Socketing Tool
 

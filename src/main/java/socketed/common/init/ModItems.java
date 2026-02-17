@@ -1,7 +1,9 @@
 package socketed.common.init;
 
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
 import net.minecraftforge.registries.IForgeRegistry;
+import socketed.Socketed;
 import socketed.common.config.ForgeConfig;
 import socketed.common.item.ItemSocketGeneric;
 import socketed.common.item.ItemSocketTier;
@@ -29,6 +31,9 @@ public class ModItems {
         for(ItemSocketGeneric socket : socketItems) {
             registry.register(socket);
         }
+        ItemBlock block = new ItemBlock(ModBlocks.BLOCK_SOCKETING);
+        block.setRegistryName(Socketed.MODID, "socket_block");
+        registry.register(block);
     }
 
     public static void registerModels() {
