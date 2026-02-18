@@ -1,5 +1,9 @@
 {
+  "forge_marker": 1,
   "variants": {
-    "normal": { "model": "crafting_table" }
+    "facing=north": { "model": "socketed:socket_block" },
+    "facing=south": { "model": "socketed:socket_block", "y": 180 },
+    "facing=west":  { "model": "socketed:socket_block", "y": 270 },
+    "facing=east":  { "model": "socketed:socket_block", "y": 90 }
   }
 }
