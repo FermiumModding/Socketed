@@ -115,7 +115,9 @@ public abstract class ItemMixin {
 			if(cap != null) {
 				NBTBase capNBT = CapabilitySocketableHandler.CAP_SOCKETABLE.writeNBT(cap, null);
 				if(capNBT != null) {
-					original.setTag("SocketCap", capNBT);
+					NBTTagCompound newTag = original.copy();
+					newTag.setTag("SocketCap", capNBT);
+					return newTag;
 				}
 			}
 		}
