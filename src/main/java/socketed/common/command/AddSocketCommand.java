@@ -7,11 +7,22 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
 import socketed.api.common.capabilities.socketable.CapabilitySocketableHandler;
 import socketed.api.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.api.socket.GenericSocket;
 import socketed.api.socket.TieredSocket;
+import socketed.common.config.ForgeConfig;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class AddSocketCommand extends CommandBase {
     
@@ -83,7 +94,7 @@ public class AddSocketCommand extends CommandBase {
                     else if(argString[2].equals("tiered")) {
                         int tier = 0;
                         try {
-                            tier = Math.min(3, Math.max(0, Integer.parseInt(argString[3])));
+                            tier = MathHelper.clamp(Integer.parseInt(argString[3]), 0, ForgeConfig.COMMON.maxSocketTier);
                         }
                         catch(Exception ignored) {}
                         cap.replaceSocketAt(new TieredSocket(tier), index);
@@ -143,5 +154,40 @@ public class AddSocketCommand extends CommandBase {
                 throw new WrongUsageException("Invalid command usage" + "\n" + getUsage(sender));
             }
 		}
+    }
+
+    @Override @Nonnull
+    public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
+        if (args.length == 1) return CommandBase.getListOfStringsMatchingLastWord(args, "add", "replace", "lock", "disable");
+
+        List<String> completions = new ArrayList<>();
+
+        if(!(sender.getCommandSenderEntity() instanceof EntityPlayer)) return completions;
+        if(sender.getEntityWorld().isRemote) return completions;
+        EntityPlayer player = (EntityPlayer)sender.getCommandSenderEntity();
+
+        ICapabilitySocketable cap = player.getHeldItemMainhand().getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+        if(cap == null) return completions;
+
+        if(args[0].equals("add")) {
+            if(args.length == 2) {
+                completions.addAll(CommandBase.getListOfStringsMatchingLastWord(args, Arrays.asList("tiered", "generic")));
+            } else if(args.length == 3) {
+                if(!args[1].equals("tiered")) return completions;
+                completions.addAll(CommandBase.getListOfStringsMatchingLastWord(args, IntStream.range(0, ForgeConfig.COMMON.maxSocketTier).boxed().collect(Collectors.toList())));
+            }
+        } else {
+            if (args.length == 2) {
+                completions.addAll(CommandBase.getListOfStringsMatchingLastWord(args, IntStream.range(0, cap.getSockets().size()).boxed().collect(Collectors.toList())));
+            } else if(args.length == 3) {
+                if(!args[0].equals("replace")) return completions;
+                completions.addAll(CommandBase.getListOfStringsMatchingLastWord(args, Arrays.asList("tiered", "generic")));
+            } else if(args.length == 4) {
+                if(!args[0].equals("replace")) return completions;
+                if(!args[2].equals("tiered")) return completions;
+                completions.addAll(CommandBase.getListOfStringsMatchingLastWord(args, IntStream.range(0, ForgeConfig.COMMON.maxSocketTier).boxed().collect(Collectors.toList())));
+            }
+        }
+        return completions;
     }
 }
