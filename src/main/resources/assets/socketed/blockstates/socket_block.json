@@ -4,6 +4,10 @@
     "facing=north": { "model": "socketed:socket_block" },
     "facing=south": { "model": "socketed:socket_block", "y": 180 },
     "facing=west":  { "model": "socketed:socket_block", "y": 270 },
-    "facing=east":  { "model": "socketed:socket_block", "y": 90 }
+    "facing=east":  { "model": "socketed:socket_block", "y": 90 },
+    "inventory": {
+      "model": "socketed:socket_block",
+      "transform": "forge:default-block"
+    }
   }
 }

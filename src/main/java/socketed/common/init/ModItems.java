@@ -31,9 +31,8 @@ public class ModItems {
         for(ItemSocketGeneric socket : socketItems) {
             registry.register(socket);
         }
-        ItemBlock block = new ItemBlock(ModBlocks.BLOCK_SOCKETING);
-        block.setRegistryName(Socketed.MODID, "socket_block");
-        registry.register(block);
+        registry.register(new ItemBlock(ModBlocks.BLOCK_SOCKETING).setRegistryName(Socketed.MODID, "socket_block").setTranslationKey("socket_block"));
+        ModBlocks.BLOCK_SOCKETING.initModel();
     }
 
     public static void registerModels() {
