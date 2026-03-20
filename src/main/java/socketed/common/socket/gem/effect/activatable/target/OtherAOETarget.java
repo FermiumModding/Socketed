@@ -22,6 +22,8 @@ public class OtherAOETarget extends GenericTarget {
 	
 	@SerializedName("Block Range")
 	protected final Integer blockRange;
+	@SerializedName("Max Targets")
+	protected Integer maxTargets = -1;
 	
 	public OtherAOETarget(@Nullable GenericCondition condition, int blockRange) {
 		super(condition);
@@ -31,10 +33,13 @@ public class OtherAOETarget extends GenericTarget {
 	@Override
 	public void affectTarget(ActivatableGemEffect effect, @Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
 		List<EntityLivingBase> entitiesNearby = playerSource.world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(effectTarget.getPosition()).grow(this.blockRange));
+		int targetedCount = 0;
 		for(EntityLivingBase entity : entitiesNearby) {
+			if(this.maxTargets >= 0 && targetedCount >= this.maxTargets) return;
 			if(entity != playerSource && entity != effectTarget) {
 				if(this.testCondition(callback, playerSource, entity)) {
 					effect.performEffect(callback, playerSource, entity);
+					targetedCount++;
 				}
 			}
 		}
@@ -53,12 +58,15 @@ public class OtherAOETarget extends GenericTarget {
 	
 	/**
 	 * BlockRange: Required
+	 * Max Targets: Optional, default -1
 	 */
 	@Override
 	public boolean validate() {
 		if(super.validate()) {
 			if(this.blockRange == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Target, block range must be defined");
 			else if(this.blockRange < 1) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Target, block range must be greater than 0");
+			else if(this.maxTargets == null) this.maxTargets = -1;
+			else if(this.maxTargets < -1) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Target, max targets must be greater or equal -1");
 			else return true;
 		}
 		return false;
