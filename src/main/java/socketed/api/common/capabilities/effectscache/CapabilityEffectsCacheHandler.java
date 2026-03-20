@@ -98,11 +98,9 @@ public class CapabilityEffectsCacheHandler {
             if(capNew != null) {
                 List<GenericGemEffect> effectsNew = capNew.getAllActiveEffects(slotType);
                 for(GenericGemEffect effect : effectsNew) {
-                    if(effect instanceof AttributeGemEffect) {
-                        effect.onEquip(player, stackNew);
-                    }
-                    else {
-                        //Attribute effects are handled above, so only non-attribute effects are cached in the player capability
+                    effect.onEquip(player, stackNew);
+                    if(!(effect instanceof AttributeGemEffect)) {
+                        //Attribute effects are handled in onEquip, only non-attribute effects are cached in the player capability
                         effectsToCache.add(effect);
                     }
                 }
