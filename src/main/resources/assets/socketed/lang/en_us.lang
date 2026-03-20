@@ -59,6 +59,7 @@ socketed.tooltip.effect.knockback=Knockback
 socketed.tooltip.effect.knockback.inverted=Pull
 socketed.tooltip.effect.removetarget=Remove Target
 socketed.tooltip.effect.undyingtotem=Undying Totem
+socketed.tooltip.effect.executecommand=Execute Command: %s
 
 socketed.tooltip.effect.plusenchantment=+%d %s
 
