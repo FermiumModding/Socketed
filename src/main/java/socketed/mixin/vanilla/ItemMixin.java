@@ -74,13 +74,7 @@ public abstract class ItemMixin {
 				}
 			}
 			else {
-				List<GenericGemEffect> effects = null;
-				switch(slot) {
-					case HEAD: effects = cap.getAllActiveEffects(SocketedSlotTypes.HEAD); break;
-					case CHEST: effects = cap.getAllActiveEffects(SocketedSlotTypes.CHEST); break;
-					case LEGS: effects = cap.getAllActiveEffects(SocketedSlotTypes.LEGS); break;
-					case FEET: effects = cap.getAllActiveEffects(SocketedSlotTypes.FEET); break;
-				}
+				List<GenericGemEffect> effects = cap.getAllActiveEffects(SocketedSlotTypes.fromEntityEquipmentSlot(slot));
 				for(GenericGemEffect effect : effects) {
 					if(effect instanceof AttributeGemEffect) {
 						AttributeGemEffect attrEffect = (AttributeGemEffect)effect;
