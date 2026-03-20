@@ -50,11 +50,13 @@ public class ExecuteCommandEffect extends ActivatableGemEffect {
                 .replaceAll("%playerX%", ""+playerSource.getPosition().getX())
                 .replaceAll("%playerY%", ""+playerSource.getPosition().getY())
                 .replaceAll("%playerZ%", ""+playerSource.getPosition().getZ())
+                .replaceAll("%playerPos%", playerSource.getPosition().getX() + " " + playerSource.getPosition().getY() + " " + playerSource.getPosition().getZ())
                 .replaceAll("%targetName%", effectTarget.getName())
                 .replaceAll("%targetUUID%", effectTarget.getUniqueID().toString())
                 .replaceAll("%targetX%", ""+effectTarget.getPosition().getX())
                 .replaceAll("%targetY%", ""+effectTarget.getPosition().getY())
-                .replaceAll("%targetZ%", ""+effectTarget.getPosition().getZ());
+                .replaceAll("%targetZ%", ""+effectTarget.getPosition().getZ())
+                .replaceAll("%targetPos%", effectTarget.getPosition().getX() + " " + effectTarget.getPosition().getY() + " " + effectTarget.getPosition().getZ());
 
         playerSource.getServer().commandManager.executeCommand(new CommandSenderWrapper(playerSource), actualCommand);
     }
