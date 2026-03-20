@@ -14,6 +14,7 @@ import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import socketed.Socketed;
 import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
 import socketed.api.socket.gem.effect.activatable.activator.GenericActivator;
 import socketed.api.socket.gem.effect.activatable.callback.IEffectCallback;
@@ -64,6 +65,19 @@ public class ExecuteCommandEffect extends ActivatableGemEffect {
     @Override
     public String getTypeName() {
         return TYPE_NAME;
+    }
+
+    /**
+     * Command: Required
+     */
+    @Override
+    public boolean validate() {
+        if(super.validate()) {
+            if(this.command == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, command must be defined");
+            else if(this.command.isEmpty()) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, command can't be empty");
+            else return true;
+        }
+        return false;
     }
 
     public static class CommandSenderWrapper implements ICommandSender {
