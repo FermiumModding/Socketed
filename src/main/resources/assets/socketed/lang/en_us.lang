@@ -11,13 +11,13 @@ item.socketed.socket.socket_tier_3.tooltip=Used to add a new Epic socket to an i
 item.socketed.socket.socket_tier_4.tooltip=Used to add a new Legendary socket to an item
 item.socketed.socket.socket_tier_5.tooltip=Used to add a new Ultimate socket to an item
 
-item.socketed.socket.socket_generic.name=§6Generic Socket
-item.socketed.socket.socket_tier_0.name=§7Common Socket
-item.socketed.socket.socket_tier_1.name=§fUncommon Socket
-item.socketed.socket.socket_tier_2.name=§eRare Socket
-item.socketed.socket.socket_tier_3.name=§bEpic Socket
-item.socketed.socket.socket_tier_4.name=§5Legendary Socket
-item.socketed.socket.socket_tier_5.name=§4Ultimate Socket
+item.socketed.socket_generic.name=§6Generic Socket
+item.socketed.socket_tier_0.name=§7Common Socket
+item.socketed.socket_tier_1.name=§fUncommon Socket
+item.socketed.socket_tier_2.name=§eRare Socket
+item.socketed.socket_tier_3.name=§bEpic Socket
+item.socketed.socket_tier_4.name=§5Legendary Socket
+item.socketed.socket_tier_5.name=§4Ultimate Socket
 
 socketed.socketinggui.displayname=Socketing
 

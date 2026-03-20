@@ -1,0 +1,6 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "socketed:items/socket_tier_1"
+    }
+}
