@@ -118,7 +118,7 @@ public class CapabilityEffectsCacheHandler {
                     else {
                         //Attribute effects are handled above, so only non-attribute effects are cached in the player capability
                         if(effect instanceof PotionGemEffect)
-                            player.getActivePotionMap().remove(((PotionGemEffect)effect).getPotion());
+                            player.removePotionEffect(((PotionGemEffect)effect).getPotion());
 
                         effectsToUncache.add(effect);
                     }
