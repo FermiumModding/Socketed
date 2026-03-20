@@ -56,6 +56,10 @@ public class PotionGemEffect extends ActivatableGemEffect {
             effectTarget.addPotionEffect(new PotionEffect(this.potion, this.duration, this.amplifier));
         }
     }
+
+    public Potion getPotion() {
+        return potion;
+    }
     
     @Override
     public String getTypeName() {

@@ -28,6 +28,7 @@ import socketed.common.socket.gem.effect.AttributeGemEffect;
 import socketed.api.socket.gem.effect.GenericGemEffect;
 import socketed.api.socket.gem.effect.slot.ISlotType;
 import socketed.api.socket.gem.effect.slot.SocketedSlotTypes;
+import socketed.common.socket.gem.effect.activatable.PotionGemEffect;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -116,6 +117,9 @@ public class CapabilityEffectsCacheHandler {
                     }
                     else {
                         //Attribute effects are handled above, so only non-attribute effects are cached in the player capability
+                        if(effect instanceof PotionGemEffect)
+                            player.getActivePotionMap().remove(((PotionGemEffect)effect).getPotion());
+
                         effectsToUncache.add(effect);
                     }
                 }
