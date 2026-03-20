@@ -1,6 +1,8 @@
 package socketed.api.socket.gem.effect;
 
 import com.google.gson.annotations.SerializedName;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -45,6 +47,18 @@ public abstract class GenericGemEffect {
     public GenericGemEffect instantiate() {
         return this;
     }
+
+    /**
+     * Is called when the stack with this effect is equipped to the players equipment slots
+     * Use this to add various temporary changes
+     */
+    public void onEquip(EntityPlayer player, ItemStack stack) {}
+
+    /**
+     * Is called when the stack with this effect is unequipped from the players equipment slots
+     * Use this to remove various temporary changes that were added by this gem effect
+     */
+    public void onUnequip(EntityPlayer player, ItemStack stack) {}
     
     /**
      * Attempts to validate this effect and setup caches from parsed values, such as Potion references

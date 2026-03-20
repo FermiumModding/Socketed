@@ -1,10 +1,6 @@
 package socketed.api.common.capabilities.effectscache;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.ai.attributes.IAttribute;
-import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
@@ -28,12 +24,10 @@ import socketed.common.socket.gem.effect.AttributeGemEffect;
 import socketed.api.socket.gem.effect.GenericGemEffect;
 import socketed.api.socket.gem.effect.slot.ISlotType;
 import socketed.api.socket.gem.effect.slot.SocketedSlotTypes;
-import socketed.common.socket.gem.effect.activatable.PotionGemEffect;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class CapabilityEffectsCacheHandler {
@@ -59,10 +53,7 @@ public class CapabilityEffectsCacheHandler {
             if(event.getObject().hasCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE, null)) return;
             event.addCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE_KEY, new CapabilityEffectsCacheHandler.Provider());
         }
-        
-        private static final List<IAttribute> handSkipAttributes = Arrays.asList(SharedMonsterAttributes.ATTACK_DAMAGE, SharedMonsterAttributes.ATTACK_SPEED, EntityPlayer.REACH_DISTANCE);
-        private static final List<IAttribute> bodySkipAttributes = Arrays.asList(SharedMonsterAttributes.ARMOR, SharedMonsterAttributes.ARMOR_TOUGHNESS);
-        
+
         //This handling assumes that gems cant be added or removed while wearing the item
         //This doesn't fire when swapping from one item to another of same item type in creative mode for whatever reason
         @SubscribeEvent(priority = EventPriority.LOWEST)
@@ -92,34 +83,9 @@ public class CapabilityEffectsCacheHandler {
             if(capOld != null) {
                 List<GenericGemEffect> effectsOld = capOld.getAllActiveEffects(slotType);
                 for(GenericGemEffect effect : effectsOld) {
-                    if(effect instanceof AttributeGemEffect) {
-                        AttributeGemEffect attrEffect = (AttributeGemEffect)effect;
-                        AttributeModifier modifier = attrEffect.getModifier();
-                        if(modifier == null) continue;
-                        
-                        String attribute = attrEffect.getAttribute();
-                        IAttributeInstance attrInstance = player.getAttributeMap().getAttributeInstanceByName(attribute);
-                        if(attrInstance == null) continue;
-                        
-                        //Damage/Speed/Reach Attributes applied on weapons themselves are handled in ItemMixin for proper handling/compat with offhand mods like RLCombat
-                        if(slotType.isSlotValid(SocketedSlotTypes.HAND) && handSkipAttributes.contains(attrInstance.getAttribute())) {
-                            continue;
-                        }
-                        
-                        //Armor/Armor Toughness Attributes applied on armor themselves are handled in ItemMixin for proper handling/compat with slot-specific mods like FirstAid
-                        if(slotType.isSlotValid(SocketedSlotTypes.BODY) && bodySkipAttributes.contains(attrInstance.getAttribute())) {
-                            continue;
-                        }
-                        
-                        if(attrInstance.hasModifier(modifier)) {
-                            attrInstance.removeModifier(modifier);
-                        }
-                    }
-                    else {
-                        //Attribute effects are handled above, so only non-attribute effects are cached in the player capability
-                        if(effect instanceof PotionGemEffect)
-                            player.removePotionEffect(((PotionGemEffect)effect).getPotion());
-
+                    effect.onUnequip(player, stackOld);
+                    if(!(effect instanceof AttributeGemEffect)) {
+                        //Attribute effects are handled fully in onUnequip, only non-attribute effects are cached in the player capability
                         effectsToUncache.add(effect);
                     }
                 }
@@ -133,27 +99,7 @@ public class CapabilityEffectsCacheHandler {
                 List<GenericGemEffect> effectsNew = capNew.getAllActiveEffects(slotType);
                 for(GenericGemEffect effect : effectsNew) {
                     if(effect instanceof AttributeGemEffect) {
-                        AttributeGemEffect attrEffect = (AttributeGemEffect)effect;
-                        AttributeModifier modifier = attrEffect.getModifier();
-                        if(modifier == null) continue;
-                        
-                        String attribute = attrEffect.getAttribute();
-                        IAttributeInstance attrInstance = player.getAttributeMap().getAttributeInstanceByName(attribute);
-                        if(attrInstance == null) continue;
-                        
-                        //Damage/Speed/Reach Attributes applied on weapons themselves are handled in ItemMixin for proper handling/compat with offhand mods like RLCombat
-                        if(slotType.isSlotValid(SocketedSlotTypes.HAND) && handSkipAttributes.contains(attrInstance.getAttribute())) {
-                            continue;
-                        }
-                        
-                        //Armor/Armor Toughness Attributes applied on armor themselves are handled in ItemMixin for proper handling/compat with slot-specific mods like FirstAid
-                        if(slotType.isSlotValid(SocketedSlotTypes.BODY) && bodySkipAttributes.contains(attrInstance.getAttribute())) {
-                            continue;
-                        }
-                        
-                        if(!attrInstance.hasModifier(modifier)) {
-                            attrInstance.applyModifier(modifier);
-                        }
+                        effect.onEquip(player, stackNew);
                     }
                     else {
                         //Attribute effects are handled above, so only non-attribute effects are cached in the player capability

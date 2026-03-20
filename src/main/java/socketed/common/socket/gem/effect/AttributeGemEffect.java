@@ -2,7 +2,11 @@ package socketed.common.socket.gem.effect;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
@@ -10,10 +14,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
 import socketed.api.socket.gem.effect.GenericGemEffect;
 import socketed.api.socket.gem.effect.slot.ISlotType;
+import socketed.api.socket.gem.effect.slot.SocketedSlotTypes;
 import socketed.api.socket.gem.util.RandomValueRange;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class AttributeGemEffect extends GenericGemEffect {
@@ -106,7 +113,56 @@ public class AttributeGemEffect extends GenericGemEffect {
     public AttributeGemEffect instantiate() {
         return new AttributeGemEffect(this);
     }
-    
+
+    private static final List<IAttribute> handSkipAttributes = Arrays.asList(SharedMonsterAttributes.ATTACK_DAMAGE, SharedMonsterAttributes.ATTACK_SPEED, EntityPlayer.REACH_DISTANCE);
+    private static final List<IAttribute> bodySkipAttributes = Arrays.asList(SharedMonsterAttributes.ARMOR, SharedMonsterAttributes.ARMOR_TOUGHNESS);
+
+    @Override
+    public void onEquip(EntityPlayer player, ItemStack stack) {
+        if(modifier == null) return;
+
+        String attribute = this.getAttribute();
+        IAttributeInstance attrInstance = player.getAttributeMap().getAttributeInstanceByName(attribute);
+        if(attrInstance == null) return;
+
+        //Damage/Speed/Reach Attributes applied on weapons themselves are handled in ItemMixin for proper handling/compat with offhand mods like RLCombat
+        if(slotType.isSlotValid(SocketedSlotTypes.HAND) && handSkipAttributes.contains(attrInstance.getAttribute())) {
+            return;
+        }
+
+        //Armor/Armor Toughness Attributes applied on armor themselves are handled in ItemMixin for proper handling/compat with slot-specific mods like FirstAid
+        if(slotType.isSlotValid(SocketedSlotTypes.BODY) && bodySkipAttributes.contains(attrInstance.getAttribute())) {
+            return;
+        }
+
+        if(!attrInstance.hasModifier(modifier)) {
+            attrInstance.applyModifier(modifier);
+        }
+    }
+
+    @Override
+    public void onUnequip(EntityPlayer player, ItemStack stack) {
+        if(modifier == null) return;
+
+        String attribute = this.getAttribute();
+        IAttributeInstance attrInstance = player.getAttributeMap().getAttributeInstanceByName(attribute);
+        if(attrInstance == null) return;
+
+        //Damage/Speed/Reach Attributes applied on weapons themselves are handled in ItemMixin for proper handling/compat with offhand mods like RLCombat
+        if(slotType.isSlotValid(SocketedSlotTypes.HAND) && handSkipAttributes.contains(attrInstance.getAttribute())) {
+            return;
+        }
+
+        //Armor/Armor Toughness Attributes applied on armor themselves are handled in ItemMixin for proper handling/compat with slot-specific mods like FirstAid
+        if(slotType.isSlotValid(SocketedSlotTypes.BODY) && bodySkipAttributes.contains(attrInstance.getAttribute())) {
+            return;
+        }
+
+        if(attrInstance.hasModifier(modifier)) {
+            attrInstance.removeModifier(modifier);
+        }
+    }
+
     /**
      * AttributeName: Required
      * AmountRage: Required

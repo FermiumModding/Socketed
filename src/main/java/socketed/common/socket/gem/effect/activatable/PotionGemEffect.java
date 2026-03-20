@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.fml.relauncher.Side;
@@ -56,14 +57,15 @@ public class PotionGemEffect extends ActivatableGemEffect {
             effectTarget.addPotionEffect(new PotionEffect(this.potion, this.duration, this.amplifier));
         }
     }
-
-    public Potion getPotion() {
-        return potion;
-    }
     
     @Override
     public String getTypeName() {
         return TYPE_NAME;
+    }
+
+    @Override
+    public void onUnequip(EntityPlayer player, ItemStack stack) {
+        player.removePotionEffect(this.potion);
     }
     
     /**
