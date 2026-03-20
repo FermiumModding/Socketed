@@ -5,6 +5,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.storage.loot.functions.LootFunctionManager;
 import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -19,6 +20,8 @@ import org.apache.logging.log4j.Logger;
 import socketed.api.common.capabilities.effectscache.CapabilityEffectsCacheHandler;
 import socketed.api.common.capabilities.socketable.CapabilitySocketableHandler;
 import socketed.common.command.AddSocketCommand;
+import socketed.common.compat.CompatUtil;
+import socketed.common.compat.FirstAidCompat;
 import socketed.common.config.JsonConfig;
 import socketed.common.container.GuiHandlerSocketing;
 import socketed.common.init.ModBlocks;
@@ -53,6 +56,8 @@ public class Socketed {
         LootFunctionManager.registerFunction(new LootFunctionAddSocketsRandomly.Serializer());
 
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandlerSocketing());
+
+        if(CompatUtil.firstaid.isLoaded()) MinecraftForge.EVENT_BUS.register(FirstAidCompat.class);
     }
     
     @Mod.EventHandler

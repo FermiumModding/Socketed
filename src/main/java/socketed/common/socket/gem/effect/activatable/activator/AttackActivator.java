@@ -68,7 +68,7 @@ public abstract class AttackActivator extends GenericActivator {
 	 * @param other the other entity involved in the attack event, can be attacker (Attacked) or target (Attacking)
 	 * @param directlyActivated if the source of the effect is the attacker's weapon rather than the player's effect cache
 	 */
-	protected void attemptAttackActivation(ActivatableGemEffect effect, GenericEventCallback<? extends Event> callback, EntityPlayer player, EntityLivingBase other, boolean directlyActivated, EventType type) {
+	public void attemptAttackActivation(ActivatableGemEffect effect, GenericEventCallback<? extends Event> callback, EntityPlayer player, EntityLivingBase other, boolean directlyActivated, EventType type) {
 		//Check if direct activation is required
 		if(directlyActivated != this.directlyActivated) return;
 		//Check if it's in the correct event

@@ -258,5 +258,17 @@ public enum SocketedSlotTypes implements ISlotType {
 		public String getTooltipKey() {
 			return "offhand";
 		}
+	};
+
+	public static SocketedSlotTypes fromEntityEquipmentSlot(EntityEquipmentSlot slot) {
+		switch (slot) {
+			case MAINHAND: return MAINHAND;
+			case OFFHAND: return OFFHAND;
+			case HEAD: return HEAD;
+			case CHEST: return CHEST;
+			case LEGS: return LEGS;
+			case FEET: return FEET;
+			default: return NONE;
+		}
 	}
 }

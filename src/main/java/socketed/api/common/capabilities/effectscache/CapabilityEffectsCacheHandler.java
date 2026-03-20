@@ -78,16 +78,8 @@ public class CapabilityEffectsCacheHandler {
             
             //As this event is only posted related to EntityEquipmentSlot, switching based on it doesnt matter much
             //Mods that add slots will need their own equipment change handling
-            ISlotType slotType;
-            switch(slot) {
-                case MAINHAND: slotType = SocketedSlotTypes.MAINHAND; break;
-                case OFFHAND: slotType = SocketedSlotTypes.OFFHAND; break;
-                case HEAD: slotType = SocketedSlotTypes.HEAD; break;
-                case CHEST: slotType = SocketedSlotTypes.CHEST; break;
-                case LEGS: slotType = SocketedSlotTypes.LEGS; break;
-                case FEET: slotType = SocketedSlotTypes.FEET; break;
-                default: return;
-            }
+            ISlotType slotType = SocketedSlotTypes.fromEntityEquipmentSlot(slot);
+            if(slotType == SocketedSlotTypes.NONE) return;
             
             //TODO: Retest and ensure attributes applied server-side-only are synced automatically to client
             ICapabilityEffectsCache cachedEffects = player.getCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE, null);
