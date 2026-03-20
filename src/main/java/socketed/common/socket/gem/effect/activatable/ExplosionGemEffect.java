@@ -23,12 +23,15 @@ public class ExplosionGemEffect extends ActivatableGemEffect {
 
 	@SerializedName("Strength")
 	private final Float strength;
+	@SerializedName("Causes Fire")
+	private Boolean causesFire;
 	@SerializedName("Damages Terrain")
 	private Boolean damagesTerrain;
 
-	public ExplosionGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, float strength, boolean damagesTerrain, String tooltipKey) {
+	public ExplosionGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, float strength, boolean causesFire, boolean damagesTerrain, String tooltipKey) {
 		super(slotType, activator, targets, tooltipKey);
 		this.strength = strength;
+		this.causesFire = causesFire;
 		this.damagesTerrain = damagesTerrain;
 	}
 	
@@ -42,7 +45,7 @@ public class ExplosionGemEffect extends ActivatableGemEffect {
 	public void performEffect(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
 		if(playerSource != null && effectTarget != null && !playerSource.world.isRemote) {
 			BlockPos pos = effectTarget.getPosition();
-			effectTarget.world.createExplosion(effectTarget,pos.getX(), pos.getY(), pos.getZ(), this.strength, this.damagesTerrain);
+			effectTarget.world.newExplosion(effectTarget,pos.getX(), pos.getY(), pos.getZ(), this.strength, this.causesFire, this.damagesTerrain);
 		}
 	}
 	
@@ -54,11 +57,13 @@ public class ExplosionGemEffect extends ActivatableGemEffect {
 	/**
 	 * Strength: Required, positive float
 	 * Damages Terrain: Optional, default false
+	 * Causes Fire: Optional, default false
 	 */
 	@Override
 	public boolean validate() {
 		if(super.validate()) {
 			if(this.damagesTerrain == null) this.damagesTerrain = false;
+			if(this.causesFire == null) this.causesFire = false;
 
 			if(this.strength == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, strength must be defined");
 			else if(this.strength <= 0) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Effect, strength must be positive");

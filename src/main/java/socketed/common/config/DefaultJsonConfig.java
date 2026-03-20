@@ -111,7 +111,7 @@ public abstract class DefaultJsonConfig {
                         SocketedSlotTypes.HAND,
                         new AttackingActivator(new ChanceCondition(0.1F), true, AttackActivator.EventType.HURT),
                         ONLYOTHER,
-                        1, false,
+                        1, false, false,
                         "socketed.tooltip.default.gunpowder.desc"
                 )),
                 Collections.singletonList(new OreFilter("gunpowder"))));
@@ -311,7 +311,7 @@ public abstract class DefaultJsonConfig {
                         SocketedSlotTypes.HAND,
                         new AttackingActivator(new ChanceCondition(0.2F), true, AttackActivator.EventType.HURT),
                         ONLYOTHER,
-                        2, true,
+                        2, false, true,
                         "socketed.tooltip.default.tnt.desc"
                 )),
                 Collections.singletonList(new ItemFilter("minecraft:tnt", 0, false))));
