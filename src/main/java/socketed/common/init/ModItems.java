@@ -15,6 +15,7 @@ import java.util.List;
 public class ModItems {
     
     public static final ItemSocketTool ITEM_SOCKET_TOOL = new ItemSocketTool("socket_tool");
+    public static Item ITEM_SOCKET_BENCH;
     public static final List<ItemSocketGeneric> socketItems = new ArrayList<>();
 
     static {
@@ -31,7 +32,8 @@ public class ModItems {
         for(ItemSocketGeneric socket : socketItems) {
             registry.register(socket);
         }
-        registry.register(new ItemBlock(ModBlocks.BLOCK_SOCKETING).setRegistryName(Socketed.MODID, "socket_block").setTranslationKey("socket_block"));
+        ITEM_SOCKET_BENCH = new ItemBlock(ModBlocks.SOCKETING_BENCH).setRegistryName(Socketed.MODID, "socket_bench").setTranslationKey("socket_bench");
+        registry.register(ITEM_SOCKET_BENCH);
     }
 
     public static void registerModels() {
@@ -39,6 +41,6 @@ public class ModItems {
         for(ItemSocketGeneric socket : socketItems) {
             socket.registerModel();
         }
-        ModBlocks.BLOCK_SOCKETING.initModel();
+        ModBlocks.SOCKETING_BENCH.initModel();
     }
 }

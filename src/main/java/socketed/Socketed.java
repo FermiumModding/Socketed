@@ -97,5 +97,21 @@ public class Socketed {
         public static void registerItemModels(ModelRegistryEvent event) {
             ModItems.registerModels();
         }
+
+        @SubscribeEvent
+        public static void onMissingBlocks(RegistryEvent.MissingMappings<Block> event) {
+            for(RegistryEvent.MissingMappings.Mapping<Block> map : event.getMappings()) {
+                if(map.key.getPath().equals("socket_block"))
+                    map.remap(ModBlocks.SOCKETING_BENCH);
+            }
+        }
+
+        @SubscribeEvent
+        public static void onMissingItems(RegistryEvent.MissingMappings<Item> event) {
+            for(RegistryEvent.MissingMappings.Mapping<Item> map : event.getMappings()) {
+                if(map.key.getPath().equals("socket_block"))
+                    map.remap(ModItems.ITEM_SOCKET_BENCH);
+            }
+        }
     }
 }

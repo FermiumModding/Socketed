@@ -1,0 +1,13 @@
+{
+  "forge_marker": 1,
+  "variants": {
+    "facing=north": { "model": "socketed:socket_bench" },
+    "facing=south": { "model": "socketed:socket_bench", "y": 180 },
+    "facing=west":  { "model": "socketed:socket_bench", "y": 270 },
+    "facing=east":  { "model": "socketed:socket_bench", "y": 90 },
+    "inventory": {
+      "model": "socketed:socket_bench",
+      "transform": "forge:default-block"
+    }
+  }
+}

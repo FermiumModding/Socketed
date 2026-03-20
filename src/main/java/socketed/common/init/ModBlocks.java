@@ -9,10 +9,10 @@ import socketed.common.block.BlockSocketing;
 
 public class ModBlocks {
 
-    @GameRegistry.ObjectHolder(Socketed.MODID + ":socket_block")
-    public static final BlockSocketing BLOCK_SOCKETING = new BlockSocketing("socket_block");
+    @GameRegistry.ObjectHolder(Socketed.MODID + ":socket_bench")
+    public static final BlockSocketing SOCKETING_BENCH = new BlockSocketing("socket_bench");
 
     public static void registerBlocks(IForgeRegistry<Block> registry) {
-        registry.register(BLOCK_SOCKETING);
+        registry.register(SOCKETING_BENCH);
     }
 }
