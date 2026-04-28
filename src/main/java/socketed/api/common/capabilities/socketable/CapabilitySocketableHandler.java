@@ -98,18 +98,20 @@ public class CapabilitySocketableHandler {
             NBTTagCompound nbt = new NBTTagCompound();
 
             NBTTagList socketTagList = new NBTTagList();
-            for(GenericSocket socket : instance.getSockets()) {
-                socketTagList.appendTag(socket.writeToNBT());
-            }
             //Don't store NBT to stacks that could get sockets but don't have anything yet
-            if(!socketTagList.isEmpty()) nbt.setTag("Sockets", socketTagList);
+            if (!instance.getSockets().isEmpty()) {
+                for (GenericSocket socket : instance.getSockets())
+                    socketTagList.appendTag(socket.writeToNBT());
+                nbt.setTag("Sockets", socketTagList);
+            }
 
             NBTTagList gemCombinationTagList = new NBTTagList();
-            for(GemCombinationInstance gemCombination : instance.getGemCombinations()) {
-                gemCombinationTagList.appendTag(gemCombination.writeToNBT());
-            }
             //Don't store NBT to stacks that could get sockets but don't have anything yet
-            if(!gemCombinationTagList.isEmpty()) nbt.setTag("GemCombinations", gemCombinationTagList);
+            if(!instance.getGemCombinations().isEmpty()) {
+                for (GemCombinationInstance gemCombination : instance.getGemCombinations())
+                    gemCombinationTagList.appendTag(gemCombination.writeToNBT());
+                if (!gemCombinationTagList.isEmpty()) nbt.setTag("GemCombinations", gemCombinationTagList);
+            }
 
             instance.setCachedNBT(nbt); //cache new NBT
             return nbt;
