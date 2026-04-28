@@ -41,13 +41,17 @@ public class AddSocketCommand extends CommandBase {
 
     @Override
     public void execute(MinecraftServer server, ICommandSender sender, String[] argString) throws WrongUsageException {
-        if(!(sender.getCommandSenderEntity() instanceof EntityPlayer)) return;
-        if(sender.getEntityWorld().isRemote) return;
-        if(argString.length < 1) return;
+        if(!(sender.getCommandSenderEntity() instanceof EntityPlayer))
+            throw new WrongUsageException("Invalid command usage, sender not a Player", new Object[]{argString});
+        if(sender.getEntityWorld().isRemote)
+            throw new WrongUsageException("Invalid command usage, command needs to run on serverside", new Object[]{argString});
+        if(argString.length < 1)
+            throw new WrongUsageException("Invalid command usage, no arguments", new Object[]{argString});
         EntityPlayer player = (EntityPlayer)sender.getCommandSenderEntity();
         ItemStack mainhand = player.getHeldItemMainhand().copy();
         ICapabilitySocketable cap = mainhand.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
-        if(cap == null) return;
+        if(cap == null)
+            throw new WrongUsageException("Invalid command usage, Item not Socketable", new Object[]{argString});
 		switch(argString[0]) {
 			case "add": {
                 if(argString.length > 1) {
