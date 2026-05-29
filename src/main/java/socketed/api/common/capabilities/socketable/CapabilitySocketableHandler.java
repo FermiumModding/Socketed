@@ -20,6 +20,7 @@ import socketed.api.util.SocketedUtil;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 
 public class CapabilitySocketableHandler {
     
@@ -100,7 +101,7 @@ public class CapabilitySocketableHandler {
             NBTTagList socketTagList = new NBTTagList();
             //Don't store NBT to stacks that could get sockets but don't have anything yet
             if (!instance.getSockets().isEmpty()) {
-                for (GenericSocket socket : instance.getSockets())
+                for (GenericSocket socket : new ArrayList<>(instance.getSockets()))
                     socketTagList.appendTag(socket.writeToNBT());
                 nbt.setTag("Sockets", socketTagList);
             }
@@ -108,7 +109,7 @@ public class CapabilitySocketableHandler {
             NBTTagList gemCombinationTagList = new NBTTagList();
             //Don't store NBT to stacks that could get sockets but don't have anything yet
             if(!instance.getGemCombinations().isEmpty()) {
-                for (GemCombinationInstance gemCombination : instance.getGemCombinations())
+                for (GemCombinationInstance gemCombination : new ArrayList<>(instance.getGemCombinations()))
                     gemCombinationTagList.appendTag(gemCombination.writeToNBT());
                 if (!gemCombinationTagList.isEmpty()) nbt.setTag("GemCombinations", gemCombinationTagList);
             }
