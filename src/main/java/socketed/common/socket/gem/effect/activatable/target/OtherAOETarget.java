@@ -65,9 +65,11 @@ public class OtherAOETarget extends GenericTarget {
 		if(super.validate()) {
 			if(this.blockRange == null) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Target, block range must be defined");
 			else if(this.blockRange < 1) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Target, block range must be greater than 0");
-			else if(this.maxTargets == null) this.maxTargets = -1;
-			else if(this.maxTargets < -1) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Target, max targets must be greater or equal -1");
-			else return true;
+			else if(this.maxTargets != null && this.maxTargets < -1) Socketed.LOGGER.warn("Invalid " + this.getTypeName() + " Target, max targets must be greater or equal -1");
+			else {
+				if(this.maxTargets == null) this.maxTargets = -1;
+				return true;
+			}
 		}
 		return false;
 	}
