@@ -33,6 +33,39 @@ public class CapabilitySocketableHandler {
         CapabilityManager.INSTANCE.register(ICapabilitySocketable.class, new Storage(), CapabilitySocketable::new);
     }
     
+    private static final String SYNC_KEY = "SocketCap";
+    
+    /**
+     * Returns a copy of the given tag with the socketable capability attached, or the tag itself if the stack has none
+     */
+    @Nullable
+    public static NBTTagCompound writeSyncTag(ItemStack stack, @Nullable NBTTagCompound tag) {
+        if(tag == null || stack.getMaxStackSize() != 1 || !tag.getBoolean("CanSocket")) return tag;
+        ICapabilitySocketable cap = stack.getCapability(CAP_SOCKETABLE, null);
+        if(cap == null) return tag;
+        NBTBase capNBT = CAP_SOCKETABLE.writeNBT(cap, null);
+        if(capNBT == null) return tag;
+        
+        NBTTagCompound syncTag = tag.copy();
+        syncTag.setTag(SYNC_KEY, capNBT);
+        return syncTag;
+    }
+    
+    /**
+     * Reads the socketable capability from the given tag and strips it
+     */
+    public static void readSyncTag(ItemStack stack, @Nullable NBTTagCompound tag) {
+        if(tag == null || stack.getMaxStackSize() != 1 || !tag.getBoolean("CanSocket")) return;
+        NBTBase capNBT = tag.getTag(SYNC_KEY);
+        if(!(capNBT instanceof NBTTagCompound)) return;
+        ICapabilitySocketable cap = stack.getCapability(CAP_SOCKETABLE, null);
+        if(cap == null) return;
+        
+        CAP_SOCKETABLE.readNBT(cap, null, capNBT);
+        //Tag is only needed for sync, remove it to avoid bloating the non-capability tag
+        tag.removeTag(SYNC_KEY);
+    }
+    
     @Mod.EventBusSubscriber
     public static class EventHandler {
         

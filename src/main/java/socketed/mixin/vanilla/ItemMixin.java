@@ -9,7 +9,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -104,18 +103,7 @@ public abstract class ItemMixin {
 			remap = false
 	)
 	private NBTTagCompound socketed_vanillaItem_getNBTShareTag(NBTTagCompound original, ItemStack stack) {
-		if(original != null && stack.getMaxStackSize() == 1 && original.getBoolean("CanSocket")) {
-			ICapabilitySocketable cap = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
-			if(cap != null) {
-				NBTBase capNBT = CapabilitySocketableHandler.CAP_SOCKETABLE.writeNBT(cap, null);
-				if(capNBT != null) {
-					NBTTagCompound newTag = original.copy();
-					newTag.setTag("SocketCap", capNBT);
-					return newTag;
-				}
-			}
-		}
-		return original;
+		return CapabilitySocketableHandler.writeSyncTag(stack, original);
 	}
 	
 	/**
@@ -127,16 +115,6 @@ public abstract class ItemMixin {
 			remap = false
 	)
 	private void socketed_vanillaItem_readNBTShareTag(ItemStack stack, NBTTagCompound nbt, CallbackInfo ci) {
-		if(nbt != null && stack.getMaxStackSize() == 1 && nbt.getBoolean("CanSocket")) {
-			NBTBase capNBT = nbt.getTag("SocketCap");
-			if(capNBT instanceof NBTTagCompound) {
-				ICapabilitySocketable cap = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
-				if(cap != null) {
-					CapabilitySocketableHandler.CAP_SOCKETABLE.readNBT(cap, null, capNBT);
-					//Tag is only needed for sync, remove it to avoid bloating the non-capability tag
-					nbt.removeTag("SocketCap");
-				}
-			}
-		}
+		CapabilitySocketableHandler.readSyncTag(stack, nbt);
 	}
 }

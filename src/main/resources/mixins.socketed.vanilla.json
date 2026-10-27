@@ -13,7 +13,8 @@
     "EntityVillagerListItemMixin",
     "ItemMixin",
     "ItemStackMixin",
-    "LootEntryItemMixin"
+    "LootEntryItemMixin",
+    "PacketUtilMixin"
   ],
   "injectors": {
     "maxShiftBy": 10
