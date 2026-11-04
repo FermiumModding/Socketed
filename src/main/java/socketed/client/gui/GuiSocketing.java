@@ -71,6 +71,15 @@ public class GuiSocketing extends GuiContainer {
         String s = I18n.format("socketed.socketinggui.displayname");
         this.fontRenderer.drawString(s, 8, 6, 4210752);
         this.fontRenderer.drawString(this.playerInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
+
+        ItemStack socketable = this.inventorySlots.getSlot(0).getStack();
+        if(!socketable.isEmpty()) {
+            ICapabilitySocketable itemSockets = socketable.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+            if(itemSockets != null && itemSockets.getSocketCount() == 0) {
+                String noSockets = I18n.format("socketed.socketinggui.nosockets");
+                this.fontRenderer.drawString(noSockets, ContainerSocketing.xCent + 8 - this.fontRenderer.getStringWidth(noSockets) / 2, ContainerSocketing.yCent - 11, 0xAA0000);
+            }
+        }
     }
 
     protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {

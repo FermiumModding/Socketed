@@ -20,6 +20,7 @@ item.socketed.socket_tier_4.name=§5Legendary Socket
 item.socketed.socket_tier_5.name=§4Ultimate Socket
 
 socketed.socketinggui.displayname=Socketing
+socketed.socketinggui.nosockets=No Sockets
 
 attribute.name.socketed.durability=Durability
 attribute.name.socketed.experience=XP
