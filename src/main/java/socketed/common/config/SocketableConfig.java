@@ -2,13 +2,15 @@ package socketed.common.config;
 
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.*;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Config;
 import org.apache.logging.log4j.Level;
 import socketed.Socketed;
+import socketed.api.util.ItemMatcherType;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.Predicate;
 
@@ -35,7 +37,13 @@ public class SocketableConfig {
 	@Config.Comment(
 			"Defaults are predefined item types that can receive sockets, remove the entry to disable" + "\n" +
 					"Additional item types can be defined to allow for socketing other items" + "\n" +
-					"Additional Types Pattern: <TYPENAME>;<Item ID Regex>")
+					"Additional Types Pattern: <TYPENAME>;<MATCHER>;<Values>" + "\n" +
+					"Available Matchers:" + "\n" +
+					"  ITEMID: matches exact item ids, comma separated, such as minecraft:stick,minecraft:blaze_rod" + "\n" +
+					"  MODID: matches all items from the given mod ids, comma separated, such as spartanweaponry,spartanfire" + "\n" +
+					"  CLASS: matches items that are an instance of the given classes, comma separated, such as net.minecraft.item.ItemTool" + "\n" +
+					"  REGEX: matches item ids against a single regex, use | for alternatives" + "\n" +
+					"If an item matches multiple entries, the first one in this list is used")
 	@Config.Name("Socketable Item Type Definitions")
 	public String[] itemTypesConfig = {
 			"HELMET",
@@ -50,9 +58,9 @@ public class SocketableConfig {
 			"HOE",
 			"SHOVEL",
 			"SHIELD",
-			//"BATTLEAXE;(mujmajnkraftsbettersurvival\\:item.*battleaxe)|(spartan(defiled|fire|weaponry)\\:battleaxe.*)",
-			//"BS_WEAPON;mujmajnkraftsbettersurvival\\:item.*(dagger|nunchaku|hammer|battleaxe)",
-			//"SW_CROSSBOW;spartan(defiled|fire|weaponry)\\:crossbow.*"
+			//"BATTLEAXE;REGEX;(mujmajnkraftsbettersurvival\\:item.*battleaxe)|(spartan(defiled|fire|weaponry)\\:battleaxe.*)",
+			//"BS_WEAPON;REGEX;mujmajnkraftsbettersurvival\\:item.*(dagger|nunchaku|hammer|battleaxe)",
+			//"SW_CROSSBOW;REGEX;spartan(defiled|fire|weaponry)\\:crossbow.*"
 	};
 	
 	@Config.Comment("If socketable item type definitions added by addon mods should be used")
@@ -87,17 +95,23 @@ public class SocketableConfig {
 		return this.getSocketableType(stack) != null;
 	}
 	
-	private HashMap<String, SocketableType> parseItemTypes() {
-		HashMap<String, SocketableType> map = new HashMap<>();
+	private Map<String, SocketableType> parseItemTypes() {
+		Map<String, SocketableType> map = new LinkedHashMap<>();
 		for(String s : this.itemTypesConfig) {
-			String[] split = s.split(";");
+			String[] split = s.trim().split(";", 3);
 			if(split.length == 1) {
-				SocketableType type = SocketableConfig.defaultItemTypes.get(s);
-				if(type != null) map.put(s, type);
+				SocketableType type = SocketableConfig.defaultItemTypes.get(split[0]);
+				if(type != null) map.put(split[0], type);
 				else Socketed.LOGGER.log(Level.WARN, "Invalid Socketable Item Type Entry: " + s);
 			}
-			else if(split.length == 2) {
-				map.put(split[0], new SocketableType(split[1]));
+			else if(split.length == 3) {
+				try {
+					ItemMatcherType matcherType = ItemMatcherType.valueOf(split[1].trim().toUpperCase(Locale.ROOT));
+					map.put(split[0], new SocketableType(matcherType.createMatcher(split[2])));
+				}
+				catch(IllegalArgumentException e) {
+					Socketed.LOGGER.log(Level.WARN, "Invalid Socketable Item Type Entry: " + s + ", " + e.getMessage());
+				}
 			}
 			else Socketed.LOGGER.log(Level.WARN, "Invalid Socketable Item Type Entry: " + s);
 		}
@@ -119,10 +133,7 @@ public class SocketableConfig {
 		}
 		
 		public SocketableType(String regex) {
-			this.canSocket = item -> {
-				ResourceLocation location = item.getRegistryName();
-				return location != null && location.toString().matches(regex);
-			};
+			this.canSocket = ItemMatcherType.REGEX.createMatcher(regex);
 		}
 
 		public boolean canSocket(Item item) {
