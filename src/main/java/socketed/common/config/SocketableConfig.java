@@ -104,16 +104,22 @@ public class SocketableConfig {
 				if(type != null) map.put(split[0], type);
 				else Socketed.LOGGER.log(Level.WARN, "Invalid Socketable Item Type Entry: " + s);
 			}
-			else if(split.length == 3) {
+			else {
 				try {
-					ItemMatcherType matcherType = ItemMatcherType.valueOf(split[1].trim().toUpperCase(Locale.ROOT));
-					map.put(split[0], new SocketableType(matcherType.createMatcher(split[2])));
+					if(split.length == 2) {
+						//old config handling
+						Socketed.LOGGER.log(Level.WARN, "Legacy Socketable Item Type Entry: " + s + ", should be updated to " + split[0] + ";REGEX;" + split[1]);
+						map.put(split[0], new SocketableType(split[1]));
+					}
+					else {
+						ItemMatcherType matcherType = ItemMatcherType.valueOf(split[1].trim().toUpperCase(Locale.ROOT));
+						map.put(split[0], new SocketableType(matcherType.createMatcher(split[2])));
+					}
 				}
 				catch(IllegalArgumentException e) {
 					Socketed.LOGGER.log(Level.WARN, "Invalid Socketable Item Type Entry: " + s + ", " + e.getMessage());
 				}
 			}
-			else Socketed.LOGGER.log(Level.WARN, "Invalid Socketable Item Type Entry: " + s);
 		}
 		if(ForgeConfig.SOCKETABLES.allowForcedItemTypes) map.putAll(SocketableConfig.forcedItemTypes);
 		return map;
