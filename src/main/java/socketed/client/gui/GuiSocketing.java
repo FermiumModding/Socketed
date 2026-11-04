@@ -34,6 +34,7 @@ public class GuiSocketing extends GuiContainer {
     
     //Same height as double chest
     private static final int guiHeight = 222;
+    private static final int FILLED_SOCKET_FRAME_TIME = 2;
 
     public GuiSocketing(InventoryPlayer playerInv) {
         super(new ContainerSocketing(playerInv));
@@ -105,7 +106,13 @@ public class GuiSocketing extends GuiContainer {
                     int y = this.guiTop + yCent - (int)(ContainerSocketing.radius * Math.cos(socketIndex * angleIncr));
                     
                     this.mc.getTextureManager().bindTexture(socket.getSocketTexture());
-                    GuiSocketing.drawModalRectWithCustomSizedTexture(x - 7, y - 7, 0, 0, 32, 32, 32, 32);
+                    if(socket.isEmpty()) {
+                        GuiSocketing.drawModalRectWithCustomSizedTexture(x - 7, y - 7, 0, 0, 32, 32, 32, 32);
+                    }
+                    else {
+                        int frame = (int)(this.mc.world.getTotalWorldTime() / FILLED_SOCKET_FRAME_TIME % 16);
+                        GuiSocketing.drawModalRectWithCustomSizedTexture(x - 7, y - 7, (frame % 4) * 32, (frame / 4) * 32, 32, 32, 128, 128);
+                    }
                     
                     boolean disabled = socket.isDisabled();
                     boolean locked = socket.isLocked();
