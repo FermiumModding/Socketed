@@ -41,9 +41,12 @@ public class CapabilitySocketableHandler {
     @Nullable
     public static NBTTagCompound writeSyncTag(ItemStack stack, @Nullable NBTTagCompound tag) {
         if(tag == null || stack.getMaxStackSize() != 1 || !tag.getBoolean("CanSocket")) return tag;
-        ICapabilitySocketable cap = stack.getCapability(CAP_SOCKETABLE, null);
-        if(cap == null) return tag;
-        NBTBase capNBT = CAP_SOCKETABLE.writeNBT(cap, null);
+        NBTBase capNBT;
+        synchronized(stack) {
+            ICapabilitySocketable cap = stack.getCapability(CAP_SOCKETABLE, null);
+            if(cap == null) return tag;
+            capNBT = CAP_SOCKETABLE.writeNBT(cap, null);
+        }
         if(capNBT == null) return tag;
         
         NBTTagCompound syncTag = tag.copy();
@@ -124,61 +127,65 @@ public class CapabilitySocketableHandler {
         
         @Override
         public NBTBase writeNBT(Capability<ICapabilitySocketable> capability, ICapabilitySocketable instance, EnumFacing side) {
-            //If capability hasn't changed, return the cached NBT
-            NBTTagCompound cachedNBT = instance.getCachedNBT();
-            if(cachedNBT != null)
-                return cachedNBT;
+            synchronized(instance) {
+                //If capability hasn't changed, return the cached NBT
+                NBTTagCompound cachedNBT = instance.getCachedNBT();
+                if(cachedNBT != null)
+                    return cachedNBT;
 
-            NBTTagCompound nbt = new NBTTagCompound();
+                NBTTagCompound nbt = new NBTTagCompound();
 
-            NBTTagList socketTagList = new NBTTagList();
-            //Don't store NBT to stacks that could get sockets but don't have anything yet
-            if (!instance.getSockets().isEmpty()) {
-                for (GenericSocket socket : new ArrayList<>(instance.getSockets()))
-                    socketTagList.appendTag(socket.writeToNBT());
-                nbt.setTag("Sockets", socketTagList);
+                NBTTagList socketTagList = new NBTTagList();
+                //Don't store NBT to stacks that could get sockets but don't have anything yet
+                if (!instance.getSockets().isEmpty()) {
+                    for (GenericSocket socket : new ArrayList<>(instance.getSockets()))
+                        socketTagList.appendTag(socket.writeToNBT());
+                    nbt.setTag("Sockets", socketTagList);
+                }
+
+                NBTTagList gemCombinationTagList = new NBTTagList();
+                //Don't store NBT to stacks that could get sockets but don't have anything yet
+                if(!instance.getGemCombinations().isEmpty()) {
+                    for (GemCombinationInstance gemCombination : new ArrayList<>(instance.getGemCombinations()))
+                        gemCombinationTagList.appendTag(gemCombination.writeToNBT());
+                    if (!gemCombinationTagList.isEmpty()) nbt.setTag("GemCombinations", gemCombinationTagList);
+                }
+
+                instance.setCachedNBT(nbt); //cache new NBT
+                return nbt;
             }
-
-            NBTTagList gemCombinationTagList = new NBTTagList();
-            //Don't store NBT to stacks that could get sockets but don't have anything yet
-            if(!instance.getGemCombinations().isEmpty()) {
-                for (GemCombinationInstance gemCombination : new ArrayList<>(instance.getGemCombinations()))
-                    gemCombinationTagList.appendTag(gemCombination.writeToNBT());
-                if (!gemCombinationTagList.isEmpty()) nbt.setTag("GemCombinations", gemCombinationTagList);
-            }
-
-            instance.setCachedNBT(nbt); //cache new NBT
-            return nbt;
         }
 
         @Override
         public void readNBT(Capability<ICapabilitySocketable> capability, ICapabilitySocketable instance, EnumFacing side, NBTBase nbt) {
             NBTTagCompound tags = (NBTTagCompound)nbt;
             
-            //Reset cap before reading incase an existing cap is being read to such as during sync
-            instance.resetCap();
-            
-            boolean read = false;
-            if(tags.hasKey("Sockets")) {
-                NBTTagList socketsNBT = tags.getTagList("Sockets",10);
-                for(int socketIndex = 0; socketIndex < socketsNBT.tagCount(); socketIndex++) {
-                    NBTTagCompound socketNBT = socketsNBT.getCompoundTagAt(socketIndex);
-                    String socketType = socketNBT.getString("SocketType");
-                    instance.addSocketFromNBT(socketType, socketNBT);
-                    read = true;
-                }
-            }
-            if(tags.hasKey("GemCombinations")) {
-                NBTTagList combinationsNBT = tags.getTagList("GemCombinations",10);
-                for(int combinationIndex = 0; combinationIndex < combinationsNBT.tagCount(); combinationIndex++) {
-                    instance.addCombinationFromNBT(combinationsNBT.getCompoundTagAt(combinationIndex));
-                    read = true;
-                }
-            }
-            //Refresh combinations after reading to account for combination changes on update
-            if(read) instance.refreshCombinations();
+            synchronized(instance) {
+                //Reset cap before reading incase an existing cap is being read to such as during sync
+                instance.resetCap();
 
-            //After reading the cached NBT is null=invalid, will be set on next itemStack comparison
+                boolean read = false;
+                if(tags.hasKey("Sockets")) {
+                    NBTTagList socketsNBT = tags.getTagList("Sockets",10);
+                    for(int socketIndex = 0; socketIndex < socketsNBT.tagCount(); socketIndex++) {
+                        NBTTagCompound socketNBT = socketsNBT.getCompoundTagAt(socketIndex);
+                        String socketType = socketNBT.getString("SocketType");
+                        instance.addSocketFromNBT(socketType, socketNBT);
+                        read = true;
+                    }
+                }
+                if(tags.hasKey("GemCombinations")) {
+                    NBTTagList combinationsNBT = tags.getTagList("GemCombinations",10);
+                    for(int combinationIndex = 0; combinationIndex < combinationsNBT.tagCount(); combinationIndex++) {
+                        instance.addCombinationFromNBT(combinationsNBT.getCompoundTagAt(combinationIndex));
+                        read = true;
+                    }
+                }
+                //Refresh combinations after reading to account for combination changes on update
+                if(read) instance.refreshCombinations();
+
+                //After reading the cached NBT is null=invalid, will be set on next itemStack comparison
+            }
         }
     }
 }
