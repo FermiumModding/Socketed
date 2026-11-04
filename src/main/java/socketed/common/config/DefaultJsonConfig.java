@@ -181,7 +181,7 @@ public abstract class DefaultJsonConfig {
                                         new LightLevelCondition(7, ComparingCondition.ConditionComparisonType.LESS, true))),
                                 40),
                         ONLYSELF,
-                        MobEffects.NIGHT_VISION.getRegistryName().toString(), 0, 40,
+                        MobEffects.NIGHT_VISION.getRegistryName().toString(), 0, 300,
                         "socketed.tooltip.default.gold_carrot.desc"
                 )),
                 Collections.singletonList(new ItemFilter("minecraft:golden_carrot",0,false))));
