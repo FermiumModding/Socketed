@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.fml.relauncher.Side;
@@ -70,6 +71,20 @@ public class MultiEffectGemEffect extends ActivatableGemEffect {
                 if(!(((ActivatableGemEffect)effect).getActivator() instanceof MultiEffectActivator)) continue;
                 ((MultiEffectActivator)((ActivatableGemEffect)effect).getActivator()).attemptMultiEffectActivation((ActivatableGemEffect)effect, callback, playerSource, effectTarget);
             }
+        }
+    }
+    
+    @Override
+    public void onEquip(EntityPlayer player, ItemStack stack) {
+        for(GenericGemEffect effect : this.effects) {
+            effect.onEquip(player, stack);
+        }
+    }
+    
+    @Override
+    public void onUnequip(EntityPlayer player, ItemStack stack) {
+        for(GenericGemEffect effect : this.effects) {
+            effect.onUnequip(player, stack);
         }
     }
     

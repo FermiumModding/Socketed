@@ -77,24 +77,22 @@ public class CapabilityEffectsCacheHandler {
             ICapabilityEffectsCache cachedEffects = player.getCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE, null);
             if(cachedEffects == null) return;
             
-            //Remove all modifiers that were from removed item and uncache previous active non-attribute effects
-            List<GenericGemEffect> effectsToUncache = new ArrayList<>();
             ICapabilitySocketable capOld = stackOld.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+            ICapabilitySocketable capNew = stackNew.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+
+            //This event also fires for changes such as durability loss, don't remove and reapply effects if the sockets are the same
+            if(capOld != null && capNew != null && stackOld.getItem() == stackNew.getItem() &&
+               CapabilitySocketableHandler.CAP_SOCKETABLE.writeNBT(capOld, null).equals(CapabilitySocketableHandler.CAP_SOCKETABLE.writeNBT(capNew, null))) return;
+
+            //Remove all modifiers that were from removed item
             if(capOld != null) {
-                List<GenericGemEffect> effectsOld = capOld.getAllActiveEffects(slotType);
-                for(GenericGemEffect effect : effectsOld) {
+                for(GenericGemEffect effect : capOld.getAllActiveEffects(slotType)) {
                     effect.onUnequip(player, stackOld);
-                    if(!(effect instanceof AttributeGemEffect)) {
-                        //Attribute effects are handled fully in onUnequip, only non-attribute effects are cached in the player capability
-                        effectsToUncache.add(effect);
-                    }
                 }
-                cachedEffects.removeEffects(effectsToUncache);
             }
             
             //Apply new modifiers from new item and cache active non-attribute effects
             List<GenericGemEffect> effectsToCache = new ArrayList<>();
-            ICapabilitySocketable capNew = stackNew.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
             if(capNew != null) {
                 List<GenericGemEffect> effectsNew = capNew.getAllActiveEffects(slotType);
                 for(GenericGemEffect effect : effectsNew) {
@@ -104,8 +102,9 @@ public class CapabilityEffectsCacheHandler {
                         effectsToCache.add(effect);
                     }
                 }
-                cachedEffects.addEffects(effectsToCache);
             }
+            //Replaces by slot, instantiated effects like MultiEffectGemEffect wont be the same objects as those cached on equip
+            cachedEffects.setSlotEffects(slotType, effectsToCache);
         }
     }
 
