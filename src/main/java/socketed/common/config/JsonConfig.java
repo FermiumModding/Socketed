@@ -142,6 +142,8 @@ public class JsonConfig {
         loadGemTypeData();
         completedLoadingGems = true;
         loadGemCombinationData();
+        getSortedGemDataList();
+        getSortedGemCombinationData();
         completedLoadingCombinations = true;
     }
 
@@ -379,21 +381,27 @@ public class JsonConfig {
     
     //Order matters bc a list of gems might fit multiple gem combinations. more strict combinations will be found first and higher gem count combinations too
     public static List<GemCombinationType> getSortedGemCombinationData() {
-        if(sortedGemCombinationDataList == null) {
-            sortedGemCombinationDataList = new ArrayList<>(gemCombinationDataMap.values());
-            sortedGemCombinationDataList.sort(Comparator.comparingInt(v -> - v.getGemTypes().size()));
-            sortedGemCombinationDataList.sort((v1,v2) -> Boolean.compare(!v1.getIsStrictOrder(),!v2.getIsStrictOrder()));
-            sortedGemCombinationDataList.sort((v1,v2) -> Boolean.compare(!v1.getIsStrictSocketCount(),!v2.getIsStrictSocketCount()));
+        List<GemCombinationType> result = sortedGemCombinationDataList;
+        if(result == null) {
+            result = new ArrayList<>(gemCombinationDataMap.values());
+            result.sort(Comparator.comparingInt(v -> - v.getGemTypes().size()));
+            result.sort((v1,v2) -> Boolean.compare(!v1.getIsStrictOrder(),!v2.getIsStrictOrder()));
+            result.sort((v1,v2) -> Boolean.compare(!v1.getIsStrictSocketCount(),!v2.getIsStrictSocketCount()));
+            result = Collections.unmodifiableList(result);
+            sortedGemCombinationDataList = result;
         }
-        return sortedGemCombinationDataList;
+        return result;
     }
     
     //One itemstack may be valid for multiple filters, so sort by tier to prefer higher tier gemtypes first
     public static List<GemType> getSortedGemDataList() {
-        if(sortedGemDataList == null) {
-            sortedGemDataList = new ArrayList<>(gemTypesDataMap.values());
-            sortedGemDataList.sort(Comparator.comparingInt(v -> - v.getTier()));
+        List<GemType> result = sortedGemDataList;
+        if(result == null) {
+            result = new ArrayList<>(gemTypesDataMap.values());
+            result.sort(Comparator.comparingInt(v -> - v.getTier()));
+            result = Collections.unmodifiableList(result);
+            sortedGemDataList = result;
         }
-        return sortedGemDataList;
+        return result;
     }
 }
