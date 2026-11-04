@@ -332,12 +332,12 @@ public abstract class DefaultJsonConfig {
                         Arrays.asList(
                                 new PotionGemEffect(
                                         SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
-                                        MobEffects.REGENERATION.getRegistryName().toString(), 0, 40,
+                                        MobEffects.REGENERATION.getRegistryName().toString(), 0, 50,
                                         "socketed.tooltip.default.ghasttear.desc.1"
                                 ),
                                 new PotionGemEffect(
                                         SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
-                                        MobEffects.HEALTH_BOOST.getRegistryName().toString(), 0, 40,
+                                        MobEffects.HEALTH_BOOST.getRegistryName().toString(), 0, 50,
                                         "socketed.tooltip.default.ghasttear.desc.2"
                                 )
                         ),
