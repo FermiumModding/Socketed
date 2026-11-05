@@ -201,9 +201,7 @@ public class ContainerSocketing extends Container {
 
                 for(int i = 0; i < socketCount; i++) {
                     GemInstance gem = sockets.getGemAt(i);
-                    if(gem != null) {
-                        this.inventory.setInventorySlotContents(i + 1, gem.getItemStack());
-                    }
+                    this.inventory.setInventorySlotContents(i + 1, gem != null ? gem.getItemStack() : ItemStack.EMPTY);
                 }
             } else {
                 //New stack is empty, remove socket slots
