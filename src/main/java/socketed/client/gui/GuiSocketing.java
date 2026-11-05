@@ -10,7 +10,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.client.config.GuiUtils;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -46,8 +48,8 @@ public class GuiSocketing extends GuiContainer {
     private static final double CIRCUIT_POLYGON_INSET = 4.0D;
     private static final double CIRCUIT_CIRCLE_OUTSET = 4.0D;
 
-    public GuiSocketing(InventoryPlayer playerInv) {
-        super(new ContainerSocketing(playerInv));
+    public GuiSocketing(InventoryPlayer playerInv, World world, BlockPos pos) {
+        super(new ContainerSocketing(playerInv, world, pos));
         this.playerInventory = playerInv;
         this.ySize = guiHeight;
     }

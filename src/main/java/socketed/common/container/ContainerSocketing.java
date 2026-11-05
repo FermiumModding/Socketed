@@ -5,10 +5,12 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import socketed.api.common.capabilities.socketable.CapabilitySocketableHandler;
 import socketed.api.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.common.config.ForgeConfig;
+import socketed.common.init.ModBlocks;
 import socketed.api.socket.GenericSocket;
 import socketed.api.socket.gem.GemInstance;
 import socketed.api.util.SocketedUtil;
@@ -18,11 +20,15 @@ import javax.annotation.Nonnull;
 public class ContainerSocketing extends Container {
     
     private final IInventory socketingInventory;
+    private final World world;
+    private final BlockPos pos;
     public static final int xCent = 80;
     public static final int yCent = 63;
     public static final double radius = 45.;
 
-    public ContainerSocketing(InventoryPlayer playerInventory) {
+    public ContainerSocketing(InventoryPlayer playerInventory, World world, BlockPos pos) {
+        this.world = world;
+        this.pos = pos;
         this.socketingInventory = new InventoryBasic("Socketing", false, 1 + ForgeConfig.COMMON.maxSockets) {
             public int getInventoryStackLimit() {
                 return 1;
@@ -57,7 +63,8 @@ public class ContainerSocketing extends Container {
 
     @Override
     public boolean canInteractWith(@Nonnull EntityPlayer playerIn) {
-        return this.socketingInventory.isUsableByPlayer(playerIn);
+        return this.world.getBlockState(this.pos).getBlock() == ModBlocks.SOCKETING_BENCH &&
+               playerIn.getDistanceSq(this.pos.getX() + 0.5D, this.pos.getY() + 0.5D, this.pos.getZ() + 0.5D) <= 64.0D;
     }
 
     @Override
@@ -148,12 +155,17 @@ public class ContainerSocketing extends Container {
             if(!ForgeConfig.COMMON.gemsAreRemovable) {
                 return ItemStack.EMPTY;
             }
-            else if(ForgeConfig.COMMON.destroyGemsOnRemoval) {
-                this.putStackInSlot(slotId, ItemStack.EMPTY);
+            else if(ForgeConfig.COMMON.destroyGemsOnRemoval && clickType != ClickType.CLONE) {
+                if(this.inventorySlots.get(slotId).canTakeStack(player)) this.putStackInSlot(slotId, ItemStack.EMPTY);
                 return ItemStack.EMPTY;
             }
         }
         return super.slotClick(slotId,dragType,clickType,player);
+    }
+
+    @Override
+    public boolean canMergeSlot(@Nonnull ItemStack stack, @Nonnull Slot slot) {
+        return !(slot instanceof SlotGem) && super.canMergeSlot(stack, slot);
     }
 
     private static boolean isGemSlot(int slotId) {
@@ -265,8 +277,11 @@ public class ContainerSocketing extends Container {
                 ICapabilitySocketable cap = socketable.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
                 if(cap != null) {
                     if(this.getHasStack()) {
-                        GemInstance gem = new GemInstance(this.getStack());
-                        if(gem.validate()) cap.replaceGemAt(gem, this.getSlotIndex() - 1);
+                        GemInstance current = cap.getGemAt(this.getSlotIndex() - 1);
+                        if(current == null || !ItemStack.areItemsEqual(current.getItemStack(), this.getStack())) {
+                            GemInstance gem = new GemInstance(this.getStack());
+                            if(gem.validate()) cap.replaceGemAt(gem, this.getSlotIndex() - 1);
+                        }
                     }//Replace/Remove results are ignored, have to hope isItemValid/canTakeStack are handled properly by this point
                     else cap.removeGemAt(this.getSlotIndex() - 1);
                 }
