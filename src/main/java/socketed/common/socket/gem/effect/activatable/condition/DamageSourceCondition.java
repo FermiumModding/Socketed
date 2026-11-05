@@ -5,13 +5,15 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSource;
+import net.minecraftforge.event.entity.living.LivingAttackEvent;
+import net.minecraftforge.event.entity.living.LivingDamageEvent;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
 import socketed.api.socket.gem.effect.activatable.callback.GenericEventCallback;
 import socketed.api.socket.gem.effect.activatable.callback.IEffectCallback;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Method;
 
 public class DamageSourceCondition extends GenericCondition {
 	public static final String TYPE_NAME = "Damage Source";
@@ -35,9 +37,7 @@ public class DamageSourceCondition extends GenericCondition {
 		if(!(callback instanceof GenericEventCallback)) return false;
 		try {
 			Event event = ((GenericEventCallback<?>)callback).getEvent();
-			//Works for LivingAttack, LivingHurt, LivingDamage, DDD GatherDefenses, DDD DetermineDamage
-			Method method = event.getClass().getMethod("getSource");
-			DamageSource source = (DamageSource)method.invoke(event); // Invoke event.getSource()
+			DamageSource source = getSource(event);
 			if(source == null) return false;
 			
 			if(this.requireMelee && (!isDamageSourceMelee(source) || source.isExplosion())) return false;
@@ -66,6 +66,14 @@ public class DamageSourceCondition extends GenericCondition {
 		if(this.requiredDamageType == null) this.requiredDamageType = "";
 
 		return true;
+	}
+
+	private static DamageSource getSource(Event event) throws ReflectiveOperationException {
+		if(event instanceof LivingHurtEvent) return ((LivingHurtEvent)event).getSource();
+		if(event instanceof LivingDamageEvent) return ((LivingDamageEvent)event).getSource();
+		if(event instanceof LivingAttackEvent) return ((LivingAttackEvent)event).getSource();
+		//Other events with a source such as DDD GatherDefenses, DDD DetermineDamage
+		return (DamageSource)event.getClass().getMethod("getSource").invoke(event);
 	}
 
 	public static boolean isDamageSourceMelee(DamageSource source) {
