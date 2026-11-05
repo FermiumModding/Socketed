@@ -7,14 +7,14 @@ import socketed.Socketed;
 import socketed.common.config.ForgeConfig;
 import socketed.common.item.ItemSocketGeneric;
 import socketed.common.item.ItemSocketTier;
-import socketed.common.item.ItemSocketTool;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ModItems {
     
-    public static final ItemSocketTool ITEM_SOCKET_TOOL = new ItemSocketTool("socket_tool");
+
     public static Item ITEM_SOCKET_BENCH;
     public static final List<ItemSocketGeneric> socketItems = new ArrayList<>();
 
@@ -28,7 +28,7 @@ public class ModItems {
     }
     
     public static void registerItems(IForgeRegistry<Item> registry) {
-        registry.register(ITEM_SOCKET_TOOL);
+
         for(ItemSocketGeneric socket : socketItems) {
             registry.register(socket);
         }
@@ -37,7 +37,7 @@ public class ModItems {
     }
 
     public static void registerModels() {
-        ITEM_SOCKET_TOOL.registerModel();
+
         for(ItemSocketGeneric socket : socketItems) {
             socket.registerModel();
         }

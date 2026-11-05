@@ -1,7 +1,6 @@
 tile.socketed.socket_bench.name=Socketing Bench
 
-item.socketed.socket_tool.tooltip=Used to add and remove socketed gems from tools and armor
-item.socketed.socket_tool.name=Socketing Tool
+
 
 item.socketed.socket.socket_generic.tooltip=Used to add a new Generic socket to an item
 item.socketed.socket.socket_tier_0.tooltip=Used to add a new Common socket to an item
