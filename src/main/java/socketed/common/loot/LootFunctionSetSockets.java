@@ -1,9 +1,11 @@
 package socketed.common.loot;
 
 import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSerializationContext;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.JsonUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.storage.loot.LootContext;
 import net.minecraft.world.storage.loot.conditions.LootCondition;
@@ -52,7 +54,11 @@ public class LootFunctionSetSockets extends LootFunction {
         @Override
         @Nonnull
         public LootFunctionSetSockets deserialize(@Nonnull JsonObject object, @Nonnull JsonDeserializationContext deserializationContext, @Nonnull LootCondition[] conditionsIn) {
-            return new LootFunctionSetSockets(conditionsIn, deserializationContext.deserialize(object, ArrayList.class));
+            ArrayList<Integer> socketTiers = new ArrayList<>();
+            for(JsonElement tier : JsonUtils.getJsonArray(object, "socketTiers")) {
+                socketTiers.add(JsonUtils.getInt(tier, "socket tier"));
+            }
+            return new LootFunctionSetSockets(conditionsIn, socketTiers);
         }
     }
 }
