@@ -4,7 +4,6 @@ import com.google.gson.annotations.SerializedName;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
@@ -28,6 +27,8 @@ public class ExplosionGemEffect extends ActivatableGemEffect {
 	@SerializedName("Damages Terrain")
 	private Boolean damagesTerrain;
 
+	private static boolean exploding = false;
+	
 	public ExplosionGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, float strength, boolean causesFire, boolean damagesTerrain, String tooltipKey) {
 		super(slotType, activator, targets, tooltipKey);
 		this.strength = strength;
@@ -43,9 +44,14 @@ public class ExplosionGemEffect extends ActivatableGemEffect {
 	
 	@Override
 	public void performEffect(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
-		if(playerSource != null && effectTarget != null && !playerSource.world.isRemote) {
-			BlockPos pos = effectTarget.getPosition();
-			effectTarget.world.newExplosion(effectTarget,pos.getX(), pos.getY(), pos.getZ(), this.strength, this.causesFire, this.damagesTerrain);
+		if(playerSource != null && effectTarget != null && !playerSource.world.isRemote && !exploding) {
+			exploding = true;
+			try {
+				effectTarget.world.newExplosion(playerSource, effectTarget.posX, effectTarget.posY, effectTarget.posZ, this.strength, this.causesFire, this.damagesTerrain);
+			}
+			finally {
+				exploding = false;
+			}
 		}
 	}
 	
