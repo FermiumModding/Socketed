@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Predicate;
 
 public class SocketableConfig {
@@ -67,28 +69,31 @@ public class SocketableConfig {
 	@Config.Name("Allow Forced Socketable Item Types")
 	public boolean allowForcedItemTypes = true;
 	
-	private Map<String, SocketableType> enabledItemTypes = null;
-	private final Map<Item, String> cachedItemResults = new HashMap<>();
+	private volatile Map<String, SocketableType> enabledItemTypes = null;
+	private final Map<Item, Optional<String>> cachedItemResults = new ConcurrentHashMap<>();
 
 	@Nullable
 	public String getSocketableType(ItemStack stack) {
 		if(stack == null || stack.isEmpty()) return null;
-		if(this.enabledItemTypes == null) this.enabledItemTypes = this.parseItemTypes();
 		//Cache results to help reduce impact of repeated regex checks
-		if(this.cachedItemResults.containsKey(stack.getItem())) {
-			return this.cachedItemResults.get(stack.getItem());
+		Optional<String> cached = this.cachedItemResults.get(stack.getItem());
+		if(cached != null) return cached.orElse(null);
+
+		Map<String, SocketableType> itemTypes = this.enabledItemTypes;
+		if(itemTypes == null) {
+			itemTypes = this.parseItemTypes();
+			this.enabledItemTypes = itemTypes;
 		}
-		else {
-			for(HashMap.Entry<String, SocketableType> entry : this.enabledItemTypes.entrySet()) {
-				if(entry.getValue().canSocket(stack.getItem())) {
-					this.cachedItemResults.put(stack.getItem(), entry.getKey());
-					return entry.getKey();
-				}
+		String result = null;
+		for(Map.Entry<String, SocketableType> entry : itemTypes.entrySet()) {
+			if(entry.getValue().canSocket(stack.getItem())) {
+				result = entry.getKey();
+				break;
 			}
-			//Absence of a key means it has not been parsed, cache null if there is no match
-			this.cachedItemResults.put(stack.getItem(), null);
-			return null;
 		}
+		//Absence of a key means it has not been parsed, an empty value means there is no match
+		this.cachedItemResults.put(stack.getItem(), Optional.ofNullable(result));
+		return result;
 	}
 	
 	public boolean canSocket(ItemStack stack) {
