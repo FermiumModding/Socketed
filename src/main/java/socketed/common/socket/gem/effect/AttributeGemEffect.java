@@ -2,11 +2,13 @@ package socketed.common.socket.gem.effect;
 
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
@@ -125,15 +127,7 @@ public class AttributeGemEffect extends GenericGemEffect {
         IAttributeInstance attrInstance = player.getAttributeMap().getAttributeInstanceByName(attribute);
         if(attrInstance == null) return;
 
-        //Damage/Speed/Reach Attributes applied on weapons themselves are handled in ItemMixin for proper handling/compat with offhand mods like RLCombat
-        if(slotType.isSlotValid(SocketedSlotTypes.HAND) && handSkipAttributes.contains(attrInstance.getAttribute())) {
-            return;
-        }
-
-        //Armor/Armor Toughness Attributes applied on armor themselves are handled in ItemMixin for proper handling/compat with slot-specific mods like FirstAid
-        if(slotType.isSlotValid(SocketedSlotTypes.BODY) && bodySkipAttributes.contains(attrInstance.getAttribute())) {
-            return;
-        }
+        if(this.isAppliedByItem(attrInstance.getAttribute(), stack)) return;
 
         if(!attrInstance.hasModifier(modifier)) {
             attrInstance.applyModifier(modifier);
@@ -148,19 +142,28 @@ public class AttributeGemEffect extends GenericGemEffect {
         IAttributeInstance attrInstance = player.getAttributeMap().getAttributeInstanceByName(attribute);
         if(attrInstance == null) return;
 
-        //Damage/Speed/Reach Attributes applied on weapons themselves are handled in ItemMixin for proper handling/compat with offhand mods like RLCombat
-        if(slotType.isSlotValid(SocketedSlotTypes.HAND) && handSkipAttributes.contains(attrInstance.getAttribute())) {
-            return;
-        }
-
-        //Armor/Armor Toughness Attributes applied on armor themselves are handled in ItemMixin for proper handling/compat with slot-specific mods like FirstAid
-        if(slotType.isSlotValid(SocketedSlotTypes.BODY) && bodySkipAttributes.contains(attrInstance.getAttribute())) {
-            return;
-        }
+        if(this.isAppliedByItem(attrInstance.getAttribute(), stack)) return;
 
         if(attrInstance.hasModifier(modifier)) {
             attrInstance.removeModifier(modifier);
         }
+    }
+
+    /**
+     * Damage/Speed/Reach Attributes on main hand items are applied by ItemMixin for proper handling/compat with offhand mods like RLCombat
+     * Armor/Armor Toughness Attributes on armor are applied by ItemMixin for proper handling/compat with slot-specific mods like FirstAid
+     * Anything else is applied here, such as attack damage on a helmet or a shield
+     * @return if ItemMixin applies the given attribute for this effect on the given stack
+     */
+    private boolean isAppliedByItem(IAttribute attribute, ItemStack stack) {
+        EntityEquipmentSlot stackSlot = EntityLiving.getSlotForItemStack(stack);
+        if(handSkipAttributes.contains(attribute)) {
+            return slotType.isSlotValid(SocketedSlotTypes.HAND) && stackSlot == EntityEquipmentSlot.MAINHAND;
+        }
+        if(bodySkipAttributes.contains(attribute)) {
+            return slotType.isSlotValid(SocketedSlotTypes.BODY) && stackSlot.getSlotType() == EntityEquipmentSlot.Type.ARMOR;
+        }
+        return false;
     }
 
     /**
