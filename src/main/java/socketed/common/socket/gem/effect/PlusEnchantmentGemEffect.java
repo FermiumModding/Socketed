@@ -3,9 +3,13 @@ package socketed.common.socket.gem.effect;
 import com.google.gson.annotations.SerializedName;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
+import socketed.api.common.capabilities.socketable.CapabilitySocketableHandler;
+import socketed.api.common.capabilities.socketable.ICapabilitySocketable;
+import socketed.api.util.SocketedUtil;
 import socketed.api.socket.gem.effect.GenericGemEffect;
 import socketed.api.socket.gem.effect.slot.ISlotType;
 
@@ -38,6 +42,20 @@ public class PlusEnchantmentGemEffect extends GenericGemEffect {
         return this.amount;
     }
     
+    public static int getModifiedLevel(Enchantment enchantment, int level, ItemStack stack) {
+        if(level <= 0) return level;
+        ICapabilitySocketable sockets = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+        if(sockets == null) return level;
+
+        int addedAmount = SocketedUtil.filterForEffectType(sockets.getAllPossibleEffects(), PlusEnchantmentGemEffect.class)
+                .filter(effect -> enchantment.equals(effect.getEnchantment()))
+                .mapToInt(PlusEnchantmentGemEffect::getAmount)
+                .sum();
+
+        //No clamping above
+        return Math.max(level + addedAmount, enchantment.getMinLevel());
+    }
+
     @SideOnly(Side.CLIENT)
     @Override
     public String getTooltip(boolean onItem) {
