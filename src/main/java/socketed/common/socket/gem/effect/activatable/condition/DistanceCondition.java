@@ -22,7 +22,7 @@ public class DistanceCondition extends GenericCondition {
 	
 	@Override
 	public boolean testCondition(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
-		return effectTarget.getDistanceSq(playerSource) <= this.distance;
+		return effectTarget.getDistanceSq(playerSource) <= this.distance * this.distance;
 	}
 	
 	@Override
