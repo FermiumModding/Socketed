@@ -21,6 +21,7 @@ public class GenericSocket {
     public static final String TYPE_NAME = "Generic";
     
     private GemInstance gem = null;
+    private NBTTagCompound unresolvedGem = null;
     private boolean overridden = false;
     private boolean disabled = false;
     private boolean locked = false;
@@ -44,6 +45,7 @@ public class GenericSocket {
         if(nbt.hasKey("Gem")) {
             GemInstance gem = new GemInstance(nbt.getCompoundTag("Gem"));
             if(gem.validate()) this.gem = gem;
+            else this.unresolvedGem = nbt.getCompoundTag("Gem");
         }
         if(nbt.hasKey("Overridden")) this.overridden = nbt.getBoolean("Overridden");
         if(nbt.hasKey("Disabled")) this.disabled = nbt.getBoolean("Disabled");
@@ -139,6 +141,7 @@ public class GenericSocket {
         if(!ignoreLocked && this.isLocked()) return false;
         if(gem == null || this.acceptsGem(gem, ignoreLocked)) {
             this.gem = gem;
+            this.unresolvedGem = null;
             return true;
         }
         return false;
@@ -162,6 +165,7 @@ public class GenericSocket {
         NBTTagCompound nbt = new NBTTagCompound();
         nbt.setString("SocketType", GenericSocket.TYPE_NAME);
         if(this.gem != null) nbt.setTag("Gem", this.gem.writeToNBT());
+        else if(this.unresolvedGem != null) nbt.setTag("Gem", this.unresolvedGem);
         nbt.setBoolean("Overridden", this.overridden);
         nbt.setBoolean("Disabled", this.disabled);
         nbt.setBoolean("Locked", this.locked);
