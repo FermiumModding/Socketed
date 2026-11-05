@@ -1,5 +1,6 @@
 package socketed.mixin.vanilla;
 
+import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.entity.EntityLiving;
@@ -50,7 +51,8 @@ public abstract class ItemMixin {
 		if(defaultSlot != slot) return original;
 		
 		ICapabilitySocketable cap = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
-		if(cap != null) {
+		if(cap != null && cap.getGemCount() > 0) {
+			original = HashMultimap.create(original);
 			if(isHand) {
 				List<GenericGemEffect> effects = cap.getAllActiveEffects(SocketedSlotTypes.HAND);
 				for(GenericGemEffect effect : effects) {
