@@ -14,7 +14,6 @@ import socketed.api.common.capabilities.effectscache.CapabilityEffectsCacheHandl
 import socketed.api.common.capabilities.effectscache.ICapabilityEffectsCache;
 import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
 import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
-import socketed.api.util.SocketedUtil;
 
 import javax.annotation.Nullable;
 
@@ -83,8 +82,9 @@ public class PassiveActivator extends GenericActivator {
 			ICapabilityEffectsCache cachedEffects = player.getCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE, null);
 			if(cachedEffects == null) return;
 
-			SocketedUtil.filterForActivator(cachedEffects.getActiveEffects(), PassiveActivator.class)
-					.forEach(effect -> ((PassiveActivator) effect.getActivator()).attemptPassiveActivation(effect, player));
+			for(ActivatableGemEffect effect : cachedEffects.getEffectsForActivator(PassiveActivator.class)) {
+				((PassiveActivator)effect.getActivator()).attemptPassiveActivation(effect, player);
+			}
 		}
 	}
 }

@@ -18,9 +18,9 @@ import socketed.api.common.capabilities.effectscache.CapabilityEffectsCacheHandl
 import socketed.api.common.capabilities.effectscache.ICapabilityEffectsCache;
 import socketed.api.common.capabilities.socketable.CapabilitySocketableHandler;
 import socketed.api.common.capabilities.socketable.ICapabilitySocketable;
+import socketed.api.socket.gem.effect.GenericGemEffect;
 import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
 import socketed.api.socket.gem.effect.activatable.callback.GenericEventCallback;
-import socketed.api.util.SocketedUtil;
 import socketed.common.socket.gem.effect.activatable.condition.DamageSourceCondition;
 import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
 import socketed.api.socket.gem.effect.slot.SocketedSlotTypes;
@@ -138,11 +138,10 @@ public abstract class AttackActivator extends GenericActivator {
 			if(cachedEffects == null) return;
 			
 			//Handle cached effects
-			SocketedUtil.filterForActivator(cachedEffects.getActiveEffects(), AttackedActivator.class)
-					.forEach(effect -> {
-						AttackedActivator activator = (AttackedActivator) effect.getActivator();
-						activator.attemptAttackActivation(effect, callback, player, attacker, false, type);
-					});
+			for(ActivatableGemEffect effect : cachedEffects.getEffectsForActivator(AttackedActivator.class)) {
+				AttackedActivator activator = (AttackedActivator) effect.getActivator();
+				activator.attemptAttackActivation(effect, callback, player, attacker, false, type);
+			}
 
 			//TODO: FirstAid directlyActivated compat
 			//TODO: could do direct activation of active shield
@@ -153,11 +152,10 @@ public abstract class AttackActivator extends GenericActivator {
 			if(cachedEffects == null) return;
 			
 			//Handle cached effects
-			SocketedUtil.filterForActivator(cachedEffects.getActiveEffects(), AttackingActivator.class)
-					.forEach(effect ->{
-						AttackingActivator activator = (AttackingActivator) effect.getActivator();
-						activator.attemptAttackActivation(effect, callback, player, target, false, type);
-					});
+			for(ActivatableGemEffect effect : cachedEffects.getEffectsForActivator(AttackingActivator.class)) {
+				AttackingActivator activator = (AttackingActivator) effect.getActivator();
+				activator.attemptAttackActivation(effect, callback, player, target, false, type);
+			}
 			
 			//Handle direct activation effects
 			//RLCombat swaps offhand into mainhand before posting LivingAttack for offhand attacks
@@ -168,11 +166,12 @@ public abstract class AttackActivator extends GenericActivator {
 			if(sockets == null) return;
 			
 			//TODO: RLCombat compat to get whether the attack is being posted from mainhand or offhand for more accurate slot type check
-			SocketedUtil.filterForActivator(sockets.getAllActiveEffects(SocketedSlotTypes.HAND), AttackingActivator.class)
-					.forEach(effect -> {
-						AttackingActivator activator = (AttackingActivator) effect.getActivator();
-						activator.attemptAttackActivation(effect, callback, player, target, true, type);
-					});
+			for(GenericGemEffect effect : sockets.getAllActiveEffects(SocketedSlotTypes.HAND)) {
+				if(effect instanceof ActivatableGemEffect && ((ActivatableGemEffect)effect).getActivator() instanceof AttackingActivator) {
+					AttackingActivator activator = (AttackingActivator)((ActivatableGemEffect)effect).getActivator();
+					activator.attemptAttackActivation((ActivatableGemEffect)effect, callback, player, target, true, type);
+				}
+			}
 		}
 	}
 }

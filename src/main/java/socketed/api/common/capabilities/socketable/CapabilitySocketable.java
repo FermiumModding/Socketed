@@ -221,10 +221,13 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	@Override
 	@Nonnull
 	public List<GenericGemEffect> getAllActiveEffects(ISlotType slotType) {
-		return this.getAllEffectsRaw().stream()
-				   .filter(v -> SocketedUtil.isStackValidForSlot(this.itemStack, v.getSlotType()))
-				   .filter(v -> SocketedUtil.doSlotsMatch(slotType, v.getSlotType()))
-				   .collect(Collectors.toList());
+		List<GenericGemEffect> effects = new ArrayList<>();
+		for(GenericGemEffect effect : this.getAllEffectsRaw()) {
+			if(SocketedUtil.isStackValidForSlot(this.itemStack, effect.getSlotType()) && SocketedUtil.doSlotsMatch(slotType, effect.getSlotType())) {
+				effects.add(effect);
+			}
+		}
+		return effects;
 	}
 	
 	@Override

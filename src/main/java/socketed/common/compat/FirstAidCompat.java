@@ -14,7 +14,6 @@ import socketed.api.common.capabilities.effectscache.CapabilityEffectsCacheHandl
 import socketed.api.common.capabilities.effectscache.ICapabilityEffectsCache;
 import socketed.api.socket.gem.effect.activatable.callback.GenericEventCallback;
 import socketed.api.socket.gem.effect.slot.SocketedSlotTypes;
-import socketed.api.util.SocketedUtil;
 import socketed.common.socket.gem.effect.activatable.activator.AttackActivator;
 import socketed.common.socket.gem.effect.activatable.activator.AttackedActivator;
 import socketed.common.socket.gem.effect.activatable.condition.DamageSourceCondition;
@@ -70,7 +69,7 @@ public class FirstAidCompat {
         if(cachedEffects == null) return;
 
         //Handle cached effects
-        SocketedUtil.filterForActivator(cachedEffects.getActiveEffects(), AttackedActivator.class)
+        cachedEffects.getEffectsForActivator(AttackedActivator.class).stream()
                 .filter(effect -> hitEquipmentSlots.stream().anyMatch(slot -> effect.getSlotType().isSlotValid(SocketedSlotTypes.fromEntityEquipmentSlot(slot))))
                 .forEach(effect -> {
                     AttackedActivator activator = (AttackedActivator) effect.getActivator();
