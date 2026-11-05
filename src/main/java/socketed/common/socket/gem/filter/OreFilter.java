@@ -39,7 +39,7 @@ public class OreFilter extends GenericFilter {
         if(input == null || input.isEmpty()) return false;
         NonNullList<ItemStack> list = OreDictionary.getOres(this.dictName, false);
         for(ItemStack stack : list) {
-            if(stack.getItem().equals(input.getItem()) && (!this.strict || stack.getMetadata() == input.getMetadata())) {
+            if(stack.getItem().equals(input.getItem()) && (!this.strict || stack.getMetadata() == OreDictionary.WILDCARD_VALUE || stack.getMetadata() == input.getMetadata())) {
                 return true;
             }
         }
