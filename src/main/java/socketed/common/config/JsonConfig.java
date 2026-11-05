@@ -34,7 +34,7 @@ import socketed.api.util.SocketedUtil;
 import javax.annotation.Nullable;
 import java.io.File;
 import java.io.PrintWriter;
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Function;
 
@@ -148,6 +148,29 @@ public class JsonConfig {
         completedLoadingCombinations = true;
     }
 
+    static Gson createGson() {
+        FilterDeserializer filterDeserializer = new FilterDeserializer();
+        for(Map.Entry<String, Class<? extends GenericFilter>> entry : filterDeserializerMap.entrySet()) {
+            filterDeserializer.registerType(entry.getKey(), entry.getValue());
+        }
+        EffectDeserializer effectDeserializer = new EffectDeserializer();
+        for(Map.Entry<String, Class<? extends GenericGemEffect>> entry : gemEffectDeserializerMap.entrySet()) {
+            effectDeserializer.registerType(entry.getKey(), entry.getValue());
+        }
+        return new GsonBuilder()
+                .registerTypeAdapter(GenericFilter.class, filterDeserializer)
+                .registerTypeAdapter(GenericGemEffect.class, effectDeserializer)
+                .create();
+    }
+
+    static File getGemTypesFolder() {
+        return gemTypesFolder;
+    }
+
+    static File getGemCombinationFolder() {
+        return gemCombinationFolder;
+    }
+
     public static Map<String, GemType> getGemData() {
         return gemTypesDataMap;
     }
@@ -168,7 +191,7 @@ public class JsonConfig {
                 if(!file.createNewFile()) Socketed.LOGGER.error("Failed to create new gem type file, " + entry.getKey());
                 else if(!file.setWritable(true)) Socketed.LOGGER.error("Failed to set new gem type file writeable, " + entry.getKey());
                 else {
-                    PrintWriter writer = new PrintWriter(file);
+                    PrintWriter writer = new PrintWriter(file, "UTF-8");
                     writer.write(entryString);
                     writer.flush();
                     writer.close();
@@ -192,7 +215,7 @@ public class JsonConfig {
                 if(!file.createNewFile()) Socketed.LOGGER.error("Failed to create new gem combination type file, " + entry.getKey());
                 else if(!file.setWritable(true)) Socketed.LOGGER.error("Failed to set new gem combination type file writeable, " + entry.getKey());
                 else {
-                    PrintWriter writer = new PrintWriter(file);
+                    PrintWriter writer = new PrintWriter(file, "UTF-8");
                     writer.write(entryString);
                     writer.flush();
                     writer.close();
@@ -214,18 +237,7 @@ public class JsonConfig {
         }
 
         try {
-            FilterDeserializer filterDeserializer = new FilterDeserializer();
-            for(Map.Entry<String, Class<? extends GenericFilter>> entry : filterDeserializerMap.entrySet()) {
-                filterDeserializer.registerType(entry.getKey(), entry.getValue());
-            }
-            EffectDeserializer effectDeserializer = new EffectDeserializer();
-            for(Map.Entry<String, Class<? extends GenericGemEffect>> entry : gemEffectDeserializerMap.entrySet()) {
-                effectDeserializer.registerType(entry.getKey(), entry.getValue());
-            }
-            Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(GenericFilter.class, filterDeserializer)
-                    .registerTypeAdapter(GenericGemEffect.class, effectDeserializer)
-                    .create();
+            Gson gson = createGson();
 
             File[] files = gemTypesFolder.listFiles();
             if(files == null) {
@@ -291,18 +303,7 @@ public class JsonConfig {
         }
 
         try {
-            FilterDeserializer filterDeserializer = new FilterDeserializer();
-            for(Map.Entry<String, Class<? extends GenericFilter>> entry : filterDeserializerMap.entrySet()) {
-                filterDeserializer.registerType(entry.getKey(), entry.getValue());
-            }
-            EffectDeserializer effectDeserializer = new EffectDeserializer();
-            for(Map.Entry<String, Class<? extends GenericGemEffect>> entry : gemEffectDeserializerMap.entrySet()) {
-                effectDeserializer.registerType(entry.getKey(), entry.getValue());
-            }
-            Gson gson = new GsonBuilder()
-                    .registerTypeAdapter(GenericFilter.class, filterDeserializer)
-                    .registerTypeAdapter(GenericGemEffect.class, effectDeserializer)
-                    .create();
+            Gson gson = createGson();
             
             File[] files = gemCombinationFolder.listFiles();
             if(files == null) {
@@ -371,7 +372,7 @@ public class JsonConfig {
                 Socketed.LOGGER.warn("Failed to load Socketed config file, no permission to read the file: " + file.getName());
                 return null;
             }
-            String fileString = Files.toString(file, Charset.defaultCharset());
+            String fileString = Files.toString(file, StandardCharsets.UTF_8);
             return new JsonParser().parse(fileString);
         }
         catch(Exception e) {
