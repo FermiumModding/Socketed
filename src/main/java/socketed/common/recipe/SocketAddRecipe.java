@@ -72,7 +72,8 @@ public class SocketAddRecipe extends IForgeRegistryEntry.Impl<IRecipe> implement
             if(itemStack.getItem() instanceof ItemSocketGeneric) socketSlot = i;
             else if(itemStack.getMaxStackSize() == 1) {
                 ICapabilitySocketable cap = itemStack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
-                if(cap != null && cap.getSocketCount() < ForgeConfig.COMMON.maxSockets) itemSlot = i;
+                boolean locked = ForgeConfig.COMMON.enchantmentLock && itemStack.isItemEnchanted();
+                if(cap != null && !locked && cap.getSocketCount() < ForgeConfig.COMMON.maxSockets) itemSlot = i;
                 else return null;
             }
             else return null;
