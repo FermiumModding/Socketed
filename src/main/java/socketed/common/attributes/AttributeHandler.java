@@ -36,7 +36,10 @@ public class AttributeHandler {
         IAttributeInstance xpAttribute = player.getEntityAttribute(SocketedAttributes.XP);
         if(xpAttribute == null) return;
         xpAttribute.setBaseValue(amount);
-        event.setDroppedExperience((int) xpAttribute.getAttributeValue());
+        double value = xpAttribute.getAttributeValue();
+        int experience = MathHelper.floor(value);
+        if(player.getRNG().nextDouble() < value - experience) experience++;
+        event.setDroppedExperience(Math.max(0, experience));
         xpAttribute.setBaseValue(0);
     }
 
@@ -70,7 +73,7 @@ public class AttributeHandler {
         int newCount = MathHelper.clamp((int) Math.round(tradeAttribute.getAttributeValue()), 1, itemToBuy.getMaxStackSize());
 
         if (newCount != itemToBuy.getCount()) {
-            newRecipe = new MerchantRecipe(recipe.writeToTags()); //copy to not modify the original trade
+            newRecipe = new DiscountedRecipe(recipe); //copy to not modify the original trade
             getStack(newRecipe, targetsFirstItem).setCount(newCount); //modify count
         }
         tradeAttribute.setBaseValue(0); //reset attribute, technically not needed
@@ -79,5 +82,32 @@ public class AttributeHandler {
 
     private static ItemStack getStack(MerchantRecipe recipe, boolean targetsFirstItem){
         return targetsFirstItem ? recipe.getItemToBuy() : recipe.getSecondItemToBuy();
+    }
+
+    private static class DiscountedRecipe extends MerchantRecipe {
+        private final MerchantRecipe original;
+
+        private DiscountedRecipe(MerchantRecipe original) {
+            super(original.writeToTags());
+            this.original = original;
+        }
+
+        @Override
+        public void incrementToolUses() {
+            super.incrementToolUses();
+            this.original.incrementToolUses();
+        }
+
+        @Override
+        public void increaseMaxTradeUses(int increment) {
+            super.increaseMaxTradeUses(increment);
+            this.original.increaseMaxTradeUses(increment);
+        }
+
+        @Override
+        public void compensateToolUses() {
+            super.compensateToolUses();
+            this.original.compensateToolUses();
+        }
     }
 }
