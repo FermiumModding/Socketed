@@ -279,20 +279,18 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 			
 			int matchIndex = gemCombination.matches(currentGemTypes);
 			if(matchIndex != -1) {
-				GemCombinationInstance instanceNew = new GemCombinationInstance(gemCombination);
-				if(!instanceNew.validate()) continue;
-				if(!instanceNew.hasGemEffectsForStack(itemStack)) continue;
-				
 				//Check existing combinations to retain instantiated effect values if the combination was not changed
-				boolean preexisting = false;
+				GemCombinationInstance instance = null;
 				for(GemCombinationInstance instanceOld : gemCombinationsOld) {
-					if(instanceOld.getGemCombinationType() == instanceNew.getGemCombinationType()) {
-						this.gemCombinations.add(instanceOld);
-						preexisting = true;
+					if(instanceOld.getGemCombinationType() == gemCombination) {
+						instance = instanceOld;
 						break;
 					}
 				}
-				if(!preexisting) this.gemCombinations.add(instanceNew);
+				if(instance == null) instance = new GemCombinationInstance(gemCombination);
+				if(!instance.validate()) continue;
+				if(!instance.hasGemEffectsForStack(itemStack)) continue;
+				this.gemCombinations.add(instance);
 				
 				//Remove gems that belong to a combination already and optionally disable sockets belonging to them
 				if(gemCombination.getIsStrictOrder()) {
