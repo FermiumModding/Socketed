@@ -54,9 +54,11 @@ public class AddSocketCommand extends CommandBase {
             throw new WrongUsageException("Invalid command usage, Item not Socketable", new Object[]{argString});
 		switch(argString[0]) {
 			case "add": {
+                int previousCount = cap.getSocketCount();
                 if(argString.length > 1) {
                     if(argString[1].equals("generic")) {
                         cap.addSocket(new GenericSocket());
+                        if(cap.getSocketCount() == previousCount) throw new WrongUsageException("Socket could not be added to this item");
                         player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, mainhand);
                         sender.sendMessage(new TextComponentString("Added generic socket"));
                         return;
@@ -64,10 +66,11 @@ public class AddSocketCommand extends CommandBase {
                     else if(argString[1].equals("tiered")) {
                         int tier = 0;
                         try {
-                            tier = Math.min(3, Math.max(0, Integer.parseInt(argString[2])));
+                            tier = MathHelper.clamp(Integer.parseInt(argString[2]), 0, ForgeConfig.COMMON.maxSocketTier);
                         }
                         catch(Exception ignored) {}
                         cap.addSocket(new TieredSocket(tier));
+                        if(cap.getSocketCount() == previousCount) throw new WrongUsageException("Socket could not be added to this item");
                         player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, mainhand);
                         sender.sendMessage(new TextComponentString("Added tier " + tier + " socket"));
                         return;
@@ -178,7 +181,7 @@ public class AddSocketCommand extends CommandBase {
                 completions.addAll(CommandBase.getListOfStringsMatchingLastWord(args, Arrays.asList("tiered", "generic")));
             } else if(args.length == 3) {
                 if(!args[1].equals("tiered")) return completions;
-                completions.addAll(CommandBase.getListOfStringsMatchingLastWord(args, IntStream.range(0, ForgeConfig.COMMON.maxSocketTier).boxed().collect(Collectors.toList())));
+                completions.addAll(CommandBase.getListOfStringsMatchingLastWord(args, IntStream.rangeClosed(0, ForgeConfig.COMMON.maxSocketTier).boxed().collect(Collectors.toList())));
             }
         } else {
             if (args.length == 2) {
@@ -189,7 +192,7 @@ public class AddSocketCommand extends CommandBase {
             } else if(args.length == 4) {
                 if(!args[0].equals("replace")) return completions;
                 if(!args[2].equals("tiered")) return completions;
-                completions.addAll(CommandBase.getListOfStringsMatchingLastWord(args, IntStream.range(0, ForgeConfig.COMMON.maxSocketTier).boxed().collect(Collectors.toList())));
+                completions.addAll(CommandBase.getListOfStringsMatchingLastWord(args, IntStream.rangeClosed(0, ForgeConfig.COMMON.maxSocketTier).boxed().collect(Collectors.toList())));
             }
         }
         return completions;
