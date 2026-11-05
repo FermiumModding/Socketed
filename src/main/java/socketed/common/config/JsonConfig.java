@@ -253,7 +253,7 @@ public class JsonConfig {
             }
             else {
                 for(File file : files) {
-                    if(file.isDirectory()) continue;
+                    if(file.isDirectory() || !file.getName().endsWith(".json")) continue;
                     JsonElement elem = getJson(file);
                     if(elem == null) {
                         Socketed.LOGGER.warn("Failed to parse gem type config file: " + file.getName());
@@ -330,7 +330,7 @@ public class JsonConfig {
             }
             else {
                 for(File file : files) {
-                    if(file.isDirectory()) continue;
+                    if(file.isDirectory() || !file.getName().endsWith(".json")) continue;
                     JsonElement elem = getJson(file);
                     if(elem == null) {
                         Socketed.LOGGER.warn("Failed to parse gem combination type config file: " + file.getName());
