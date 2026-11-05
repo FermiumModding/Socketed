@@ -19,6 +19,28 @@ item.socketed.socket_tier_3.name=§bEpic Socket
 item.socketed.socket_tier_4.name=§5Legendary Socket
 item.socketed.socket_tier_5.name=§4Ultimate Socket
 
+socketed.editor.title=Socketed Editor
+socketed.editor.general=General
+socketed.editor.type=Type
+socketed.editor.remove=Remove
+socketed.editor.search=Search
+socketed.editor.restartnotice=Saved changes apply after restarting
+socketed.editor.gemtypes=Gem Types
+socketed.editor.combinations=Combinations
+socketed.editor.new=New
+socketed.editor.close=Close
+socketed.editor.save=Save
+socketed.editor.back=Back
+socketed.editor.discard=Discard changes?
+socketed.editor.add=Add
+socketed.editor.name=File Name
+socketed.editor.newgemtype=New Gem Type
+socketed.editor.newcombination=New Combination
+socketed.editor.unreadable=%s (invalid json)
+socketed.editor.invalidrow=Invalid value for %s
+socketed.editor.namerequired=File name is required
+socketed.editor.saved=Saved, changes apply after restarting
+
 socketed.socketinggui.displayname=Socketing
 socketed.socketinggui.nosockets=No Sockets
 

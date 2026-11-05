@@ -9,12 +9,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
+import socketed.Socketed;
 import socketed.api.common.capabilities.socketable.CapabilitySocketableHandler;
 import socketed.api.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.api.socket.GenericSocket;
 import socketed.api.socket.TieredSocket;
 import socketed.common.config.ForgeConfig;
+import socketed.common.config.JsonEditorStorage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -36,7 +40,20 @@ public class AddSocketCommand extends CommandBase {
         return "/socketed add <type> <optional:tier>" + "\n" +
                 "/socketed replace <index> <type> <optional:tier>" + "\n" +
                 "/socketed lock <index>" + "\n" +
-                "/socketed disable <index>";
+                "/socketed disable <index>" + "\n" +
+                "/socketed editor";
+    }
+    
+    private void openEditor(MinecraftServer server, EntityPlayer player) {
+        if(!Socketed.proxy.isPrivateSingleplayer(server)) {
+            player.sendMessage(new TextComponentString("The Socketed editor can only be used in singleplayer").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+            return;
+        }
+        if(ForgeConfig.COMMON.onlyUseDefaults) {
+            player.sendMessage(new TextComponentString("Only Use Default Effects is enabled in the Socketed config, disable it to use the editor").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+            return;
+        }
+        Socketed.proxy.openEditor(JsonEditorStorage.readAll(false), JsonEditorStorage.readAll(true));
     }
 
     @Override
@@ -48,6 +65,10 @@ public class AddSocketCommand extends CommandBase {
         if(argString.length < 1)
             throw new WrongUsageException("Invalid command usage, no arguments", new Object[]{argString});
         EntityPlayer player = (EntityPlayer)sender.getCommandSenderEntity();
+        if(argString[0].equals("editor")) {
+            this.openEditor(server, player);
+            return;
+        }
         ItemStack mainhand = player.getHeldItemMainhand().copy();
         ICapabilitySocketable cap = mainhand.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
         if(cap == null)
@@ -165,7 +186,7 @@ public class AddSocketCommand extends CommandBase {
 
     @Override @Nonnull
     public List<String> getTabCompletions(@Nonnull MinecraftServer server, @Nonnull ICommandSender sender, String[] args, @Nullable BlockPos targetPos) {
-        if (args.length == 1) return CommandBase.getListOfStringsMatchingLastWord(args, "add", "replace", "lock", "disable");
+        if(args.length == 1) return CommandBase.getListOfStringsMatchingLastWord(args, "add", "replace", "lock", "disable", "editor");
 
         List<String> completions = new ArrayList<>();
 
