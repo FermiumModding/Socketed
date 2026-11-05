@@ -23,9 +23,12 @@ import socketed.api.socket.gem.effect.slot.ISlotType;
 
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class ExecuteCommandEffect extends ActivatableGemEffect {
     public static final String TYPE_NAME = "Execute Command";
+
+    private static final Pattern UNSAFE_NAME_CHARACTERS = Pattern.compile("[^\\p{L}\\p{N}_-]");
 
     @SerializedName("Command")
     private final String command;
@@ -46,20 +49,28 @@ public class ExecuteCommandEffect extends ActivatableGemEffect {
         if(playerSource.world.isRemote) return;
 
         String actualCommand = this.command
-                .replaceAll("%playerName%", playerSource.getName())
-                .replaceAll("%playerUUID%", playerSource.getUniqueID().toString())
-                .replaceAll("%playerX%", ""+playerSource.getPosition().getX())
-                .replaceAll("%playerY%", ""+playerSource.getPosition().getY())
-                .replaceAll("%playerZ%", ""+playerSource.getPosition().getZ())
-                .replaceAll("%playerPos%", playerSource.getPosition().getX() + " " + playerSource.getPosition().getY() + " " + playerSource.getPosition().getZ())
-                .replaceAll("%targetName%", effectTarget.getName())
-                .replaceAll("%targetUUID%", effectTarget.getUniqueID().toString())
-                .replaceAll("%targetX%", ""+effectTarget.getPosition().getX())
-                .replaceAll("%targetY%", ""+effectTarget.getPosition().getY())
-                .replaceAll("%targetZ%", ""+effectTarget.getPosition().getZ())
-                .replaceAll("%targetPos%", effectTarget.getPosition().getX() + " " + effectTarget.getPosition().getY() + " " + effectTarget.getPosition().getZ());
+                .replace("%playerName%", sanitizeName(playerSource.getName()))
+                .replace("%playerUUID%", playerSource.getUniqueID().toString())
+                .replace("%playerX%", ""+playerSource.getPosition().getX())
+                .replace("%playerY%", ""+playerSource.getPosition().getY())
+                .replace("%playerZ%", ""+playerSource.getPosition().getZ())
+                .replace("%playerPos%", playerSource.getPosition().getX() + " " + playerSource.getPosition().getY() + " " + playerSource.getPosition().getZ())
+                .replace("%targetName%", sanitizeName(effectTarget.getName()))
+                .replace("%targetUUID%", effectTarget.getUniqueID().toString())
+                .replace("%targetX%", ""+effectTarget.getPosition().getX())
+                .replace("%targetY%", ""+effectTarget.getPosition().getY())
+                .replace("%targetZ%", ""+effectTarget.getPosition().getZ())
+                .replace("%targetPos%", effectTarget.getPosition().getX() + " " + effectTarget.getPosition().getY() + " " + effectTarget.getPosition().getZ());
 
         playerSource.getServer().commandManager.executeCommand(new CommandSenderWrapper(playerSource), actualCommand);
+    }
+
+    /**
+     * Commands run with server permissions and entity names can be set by players, such as with name tags
+     * Only keeps characters that can't add arguments, selectors, or nbt to a command
+     */
+    private static String sanitizeName(String name) {
+        return UNSAFE_NAME_CHARACTERS.matcher(name).replaceAll("");
     }
 
     @Override
@@ -96,8 +107,8 @@ public class ExecuteCommandEffect extends ActivatableGemEffect {
         //Pass-Through:
         @Override public String getName() {return actualSender.getName();}
         @Override public ITextComponent getDisplayName() {return actualSender.getDisplayName();}
-        @Override public void sendMessage(ITextComponent component) {actualSender.sendMessage(component);}
-        @Override public boolean canUseCommand(int permLevel, String commandName) {return actualSender.canUseCommand(permLevel, commandName);}
+        @Override public void sendMessage(ITextComponent component) {}
+        @Override public boolean canUseCommand(int permLevel, String commandName) {return true;}
         @Override public BlockPos getPosition() {return actualSender.getPosition();}
         @Override public Vec3d getPositionVector() {return actualSender.getPositionVector();}
         @Override public World getEntityWorld() {return actualSender.getEntityWorld();}
