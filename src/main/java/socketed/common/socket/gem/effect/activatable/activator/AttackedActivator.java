@@ -5,6 +5,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import socketed.Socketed;
 import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
+import socketed.common.compat.CompatUtil;
 
 import javax.annotation.Nullable;
 
@@ -19,7 +20,9 @@ public class AttackedActivator extends AttackActivator {
 	@Override
 	public boolean validate() {
 		boolean valid = super.validate();
-		if(valid && this.directlyActivated) Socketed.LOGGER.warn("Possible invalid " + this.getTypeName() + " Activator, directly activated is not supported and will never activate");
+		if(valid && this.directlyActivated && !(CompatUtil.firstaid.isLoaded() && this.eventType == EventType.DAMAGE)) {
+			Socketed.LOGGER.warn("Possible invalid " + this.getTypeName() + " Activator, directly activated requires FirstAid and the DAMAGE event type, otherwise it will never activate");
+		}
 		return valid;
 	}
 
