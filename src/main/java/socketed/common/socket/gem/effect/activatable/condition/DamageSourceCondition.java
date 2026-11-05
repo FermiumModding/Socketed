@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
 import socketed.api.socket.gem.effect.activatable.callback.GenericEventCallback;
@@ -39,7 +40,7 @@ public class DamageSourceCondition extends GenericCondition {
 			DamageSource source = (DamageSource)method.invoke(event); // Invoke event.getSource()
 			if(source == null) return false;
 			
-			if(this.requireMelee && !isDamageSourceMelee(source)) return false;
+			if(this.requireMelee && (!isDamageSourceMelee(source) || source.isExplosion())) return false;
 			else if(this.requireRanged && !isDamageSourceRanged(source)) return false;
 			else return this.requiredDamageType.isEmpty() || source.getDamageType().equals(requiredDamageType);
 		}
@@ -68,6 +69,7 @@ public class DamageSourceCondition extends GenericCondition {
 	}
 
 	public static boolean isDamageSourceMelee(DamageSource source) {
+		if(source instanceof EntityDamageSource && ((EntityDamageSource)source).getIsThornsDamage()) return false;
 		return source.getImmediateSource() instanceof EntityLivingBase;
 	}
 
