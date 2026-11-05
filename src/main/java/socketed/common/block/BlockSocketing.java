@@ -68,6 +68,15 @@ public class BlockSocketing extends Block {
     }
 
     @Override
+    @Nonnull
+    @SuppressWarnings("deprecation")
+    public IBlockState getStateFromMeta(int meta) {
+        EnumFacing facing = EnumFacing.byIndex(meta);
+        if(facing.getAxis() == EnumFacing.Axis.Y) facing = EnumFacing.NORTH;
+        return this.getDefaultState().withProperty(FACING, facing);
+    }
+
+    @Override
     public int getMetaFromState(IBlockState state) {
         return state.getValue(FACING).getIndex();
     }
