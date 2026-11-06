@@ -121,6 +121,7 @@ public class JsonConfig {
         SocketedUtil.registerActivator(BlockingActivator.TYPE_NAME, BlockingActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(FallActivator.TYPE_NAME, FallActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(JumpActivator.TYPE_NAME, JumpActivator.class, Socketed.MODID);
+        SocketedUtil.registerActivator(EnvironmentalDamageActivator.TYPE_NAME, EnvironmentalDamageActivator.class, Socketed.MODID);
         
         SocketedUtil.registerTarget(SelfTarget.TYPE_NAME, SelfTarget.class, Socketed.MODID);
         SocketedUtil.registerTarget(OtherTarget.TYPE_NAME, OtherTarget.class, Socketed.MODID);
