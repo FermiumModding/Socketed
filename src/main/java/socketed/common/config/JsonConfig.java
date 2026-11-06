@@ -140,6 +140,7 @@ public class JsonConfig {
         SocketedUtil.registerCondition(BlockCondition.TYPE_NAME, BlockCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(EntityStateCondition.TYPE_NAME, EntityStateCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(TimeOfDayCondition.TYPE_NAME, TimeOfDayCondition.class, Socketed.MODID);
+        SocketedUtil.registerCondition(DimensionCondition.TYPE_NAME, DimensionCondition.class, Socketed.MODID);
         
         SocketedUtil.registerSlotTypes(SocketedSlotTypes.class, Socketed.MODID);
         
