@@ -13,7 +13,7 @@ public class SocketedPlugin implements IFMLLoadingPlugin {
     public SocketedPlugin() {
         MixinBootstrap.init();
         FermiumRegistryAPI.enqueueMixin(false, "mixins.socketed.vanilla.json");
-        FermiumRegistryAPI.enqueueMixin(true, "mixins.socketed.firstaid.json", () -> Loader.isModLoaded("firstaid"));
+        FermiumRegistryAPI.enqueueMixin(true, "mixins.socketed.firstaid.json", () -> FermiumRegistryAPI.isModPresent("firstaid"));
     }
 
     @Override
