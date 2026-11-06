@@ -100,6 +100,7 @@ public class JsonConfig {
         SocketedUtil.registerEffectType(LoseTargetGemEffect.TYPE_NAME, LoseTargetGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(PlusEnchantmentGemEffect.TYPE_NAME, PlusEnchantmentGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(ExecuteCommandEffect.TYPE_NAME, ExecuteCommandEffect.class, Socketed.MODID);
+        SocketedUtil.registerEffectType(HealGemEffect.TYPE_NAME, HealGemEffect.class, Socketed.MODID);
         
         SocketedUtil.registerActivator(PassiveActivator.TYPE_NAME, PassiveActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(AttackingActivator.TYPE_NAME, AttackingActivator.class, Socketed.MODID);
