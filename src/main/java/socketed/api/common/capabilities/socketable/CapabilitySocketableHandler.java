@@ -40,16 +40,16 @@ public class CapabilitySocketableHandler {
      */
     @Nullable
     public static NBTTagCompound writeSyncTag(ItemStack stack, @Nullable NBTTagCompound tag) {
-        if(tag == null || stack.getMaxStackSize() != 1 || !tag.getBoolean("CanSocket")) return tag;
+        if(stack.isEmpty() || stack.getMaxStackSize() != 1) return tag;
         NBTBase capNBT;
         synchronized(stack) {
             ICapabilitySocketable cap = stack.getCapability(CAP_SOCKETABLE, null);
             if(cap == null) return tag;
             capNBT = CAP_SOCKETABLE.writeNBT(cap, null);
         }
-        if(capNBT == null) return tag;
+        if(!(capNBT instanceof NBTTagCompound) || ((NBTTagCompound)capNBT).isEmpty()) return tag;
         
-        NBTTagCompound syncTag = tag.copy();
+        NBTTagCompound syncTag = tag == null ? new NBTTagCompound() : tag.copy();
         syncTag.setTag(SYNC_KEY, capNBT);
         return syncTag;
     }
@@ -57,16 +57,16 @@ public class CapabilitySocketableHandler {
     /**
      * Reads the socketable capability from the given tag and strips it
      */
-    public static void readSyncTag(ItemStack stack, @Nullable NBTTagCompound tag) {
-        if(tag == null || stack.getMaxStackSize() != 1 || !tag.getBoolean("CanSocket")) return;
-        NBTBase capNBT = tag.getTag(SYNC_KEY);
-        if(!(capNBT instanceof NBTTagCompound)) return;
-        ICapabilitySocketable cap = stack.getCapability(CAP_SOCKETABLE, null);
-        if(cap == null) return;
-        
-        CAP_SOCKETABLE.readNBT(cap, null, capNBT);
-        //Tag is only needed for sync, remove it to avoid bloating the non-capability tag
+    @Nullable
+    public static NBTTagCompound readSyncTag(ItemStack stack, @Nullable NBTTagCompound tag) {
+        if(tag == null || !tag.hasKey(SYNC_KEY, 10)) return tag;
+        NBTTagCompound capNBT = tag.getCompoundTag(SYNC_KEY);
         tag.removeTag(SYNC_KEY);
+
+        ICapabilitySocketable cap = stack.getCapability(CAP_SOCKETABLE, null);
+        if(cap != null) CAP_SOCKETABLE.readNBT(cap, null, capNBT);
+        
+        return tag.isEmpty() ? null : tag;
     }
     
     @Mod.EventBusSubscriber
@@ -83,12 +83,6 @@ public class CapabilitySocketableHandler {
             //Allowed item types that can get sockets
             if(SocketedUtil.canStackHaveSockets(stack)) {
                 event.addCapability(CapabilitySocketableHandler.CAP_SOCKETABLE_KEY, new CapabilitySocketableHandler.Provider(stack));
-                
-                //This tag is only used for syncing, as share tag will not be sent to client if a stack does not have a non-capability tag
-                NBTTagCompound tag = stack.getTagCompound();
-                if(tag == null) tag = new NBTTagCompound();
-                tag.setBoolean("CanSocket", true);
-                stack.setTagCompound(tag);
             }
         }
     }
