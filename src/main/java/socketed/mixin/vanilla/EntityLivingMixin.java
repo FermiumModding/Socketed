@@ -1,10 +1,12 @@
 package socketed.mixin.vanilla;
 
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.item.ItemStack;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.world.DifficultyInstance;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import socketed.common.loot.DefaultSocketsGenerator;
 import socketed.api.util.SocketedUtil;
 
@@ -16,21 +18,17 @@ public abstract class EntityLivingMixin {
 	 * Multiple classes override setEquipmentBasedOnDifficulty, making it more difficult to use
 	 * However, setEnchantmentBasedOnDifficulty is only overridden by EntityWitherSkeleton
 	 */
-	@ModifyExpressionValue(
+	@Inject(
 			method = "setEnchantmentBasedOnDifficulty",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLiving;getHeldItemMainhand()Lnet/minecraft/item/ItemStack;", ordinal = 0)
+			at = @At("RETURN")
 	)
-	private ItemStack socketed_vanillaEntityLiving_setEnchantmentBasedOnDifficulty_getHeldItemMainhand(ItemStack original) {
-		SocketedUtil.addSocketsToStack(original, DefaultSocketsGenerator.SocketedItemCreationContext.MOB_DROP);
-		return original;
-	}
-	
-	@ModifyExpressionValue(
-			method = "setEnchantmentBasedOnDifficulty",
-			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLiving;getItemStackFromSlot(Lnet/minecraft/inventory/EntityEquipmentSlot;)Lnet/minecraft/item/ItemStack;")
-	)
-	private ItemStack socketed_vanillaEntityLiving_setEnchantmentBasedOnDifficulty_getItemStackFromSlot(ItemStack original) {
-		SocketedUtil.addSocketsToStack(original, DefaultSocketsGenerator.SocketedItemCreationContext.MOB_DROP);
-		return original;
+	private void socketed_vanillaEntityLiving_setEnchantmentBasedOnDifficulty(DifficultyInstance difficulty, CallbackInfo ci) {
+		EntityLiving entity = (EntityLiving)(Object)this;
+		SocketedUtil.addSocketsToStack(entity.getHeldItemMainhand(), DefaultSocketsGenerator.SocketedItemCreationContext.MOB_DROP);
+		for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+			if(slot.getSlotType() == EntityEquipmentSlot.Type.ARMOR) {
+				SocketedUtil.addSocketsToStack(entity.getItemStackFromSlot(slot), DefaultSocketsGenerator.SocketedItemCreationContext.MOB_DROP);
+			}
+		}
 	}
 }
