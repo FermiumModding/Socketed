@@ -25,7 +25,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.regex.Pattern;
 
-public class ExecuteCommandEffect extends ActivatableGemEffect {
+public class ExecuteCommandGemEffect extends ActivatableGemEffect {
     public static final String TYPE_NAME = "Execute Command";
 
     private static final Pattern UNSAFE_NAME_CHARACTERS = Pattern.compile("[^\\p{L}\\p{N}_-]");
@@ -33,7 +33,7 @@ public class ExecuteCommandEffect extends ActivatableGemEffect {
     @SerializedName("Command")
     private final String command;
 
-    protected ExecuteCommandEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, String tooltipKey, String command) {
+    protected ExecuteCommandGemEffect(ISlotType slotType, GenericActivator activator, List<GenericTarget> targets, String tooltipKey, String command) {
         super(slotType, activator, targets, tooltipKey);
         this.command = command;
     }
