@@ -201,6 +201,7 @@ socketed.tooltip.default.witherskull.desc=Getting hit on low health radiates Wit
 
 socketed.tooltip.default.anvil=Anvil to the face
 socketed.tooltip.default.anvil.desc=Strong knockback on hit
+socketed.tooltip.default.anvil.desc.2=Chance to disable shields when attacking
 
 socketed.tooltip.default.pufferfish=Poison them!
 socketed.tooltip.default.pufferfish.desc=Getting hit on low health radiates Poison I

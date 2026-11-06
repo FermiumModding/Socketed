@@ -262,13 +262,21 @@ public abstract class DefaultJsonConfig {
                 Collections.singletonList(new ItemFilter("minecraft:sponge", 0, true))));
 
         registerDefaultGemType("anvil", new GemType("socketed.tooltip.default.anvil", 2, TextFormatting.GRAY,
-                Collections.singletonList(new KnockbackGemEffect(
-                        SocketedSlotTypes.CHEST,
-                        new AttackedActivator(null, false, AttackActivator.EventType.HURT),
-                        ONLYOTHER,
-                        4.0F, false,
-                        "socketed.tooltip.default.anvil.desc"
-                )),
+                Arrays.asList(
+                        new KnockbackGemEffect(
+                                SocketedSlotTypes.CHEST,
+                                new AttackedActivator(null, false, AttackActivator.EventType.HURT),
+                                ONLYOTHER,
+                                4.0F, false,
+                                "socketed.tooltip.default.anvil.desc"
+                        ),
+                        new DisableShieldGemEffect(
+                                SocketedSlotTypes.HAND,
+                                new AttackingActivator(new ChanceCondition(0.25F), true, AttackActivator.EventType.ATTACK),
+                                ONLYOTHER,
+                                100,
+                                "socketed.tooltip.default.anvil.desc.2"
+                        )),
                 Collections.singletonList(new ItemFilter("minecraft:anvil", 0, true))));
 
         registerDefaultGemType("witherskull", new GemType("socketed.tooltip.default.witherskull", 2, TextFormatting.DARK_GRAY,
