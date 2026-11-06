@@ -98,6 +98,7 @@ public abstract class AttackActivator extends GenericActivator {
 		
 		@SubscribeEvent(priority = EventPriority.LOW)
 		public static void onLivingHurt(LivingHurtEvent event) {
+			if(event.getAmount() <= 0.0F) return;
 			handleEvent(event, event.getSource(), EventType.HURT, new GenericEventCallback<>(event));
 		}
 		
