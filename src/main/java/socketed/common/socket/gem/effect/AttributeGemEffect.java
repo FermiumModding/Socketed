@@ -150,10 +150,10 @@ public class AttributeGemEffect extends GenericGemEffect {
     }
 
     /**
-     * Damage/Speed/Reach Attributes on main hand items are applied by ItemMixin for proper handling/compat with offhand mods like RLCombat
-     * Armor/Armor Toughness Attributes on armor are applied by ItemMixin for proper handling/compat with slot-specific mods like FirstAid
+     * Damage/Speed/Reach Attributes on main hand items are applied by ItemStackMixin for proper handling/compat with offhand mods like RLCombat
+     * Armor/Armor Toughness Attributes on armor are applied by ItemStackMixin for proper handling/compat with slot-specific mods like FirstAid
      * Anything else is applied here, such as attack damage on a helmet or a shield
-     * @return if ItemMixin applies the given attribute for this effect on the given stack
+     * @return if ItemStackMixin applies the given attribute for this effect on the given stack
      */
     private boolean isAppliedByItem(IAttribute attribute, ItemStack stack) {
         EntityEquipmentSlot stackSlot = EntityLiving.getSlotForItemStack(stack);

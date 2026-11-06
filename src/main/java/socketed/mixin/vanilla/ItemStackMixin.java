@@ -1,8 +1,16 @@
 package socketed.mixin.vanilla;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -13,8 +21,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import socketed.common.attributes.SocketedAttributes;
 import socketed.api.common.capabilities.socketable.CapabilitySocketableHandler;
 import socketed.api.common.capabilities.socketable.ICapabilitySocketable;
+import socketed.api.socket.gem.effect.GenericGemEffect;
+import socketed.api.socket.gem.effect.slot.ISlotType;
+import socketed.api.socket.gem.effect.slot.SocketedSlotTypes;
 import socketed.common.config.ForgeConfig;
+import socketed.common.socket.gem.effect.AttributeGemEffect;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 @Mixin(ItemStack.class)
@@ -54,6 +68,51 @@ public abstract class ItemStackMixin {
         return Math.max(0, actualNewAmount);
     }
     
+    /**
+     * Handling for Damage/Speed/Reach Attributes for hand slots and Armor/Armor Toughness for body slots
+     * Damage/Speed/Reach when socketed on either hand need to only apply modifiers to the Mainhand EntityEquipmentSlot
+     * In order to work around Vanilla handling of attacking and for compat with mods like RLCombat
+     * RLCombat has builtin handling for applying Mainhand attributes during offhand attacks
+     * Technically makes it not possible to apply those attributes as "Mainhand Only" or "Offhand Only" but our abilities are limited for compat
+     * "Mainhand Only" or "Offhand Only" for non-Damage/Speed/Reach attribute effects or non-attribute effects is still possible
+     * Armor/Armor Toughness needs to be applied as attribute specific to the slot for compat with mods like First Aid
+     */
+    @ModifyReturnValue(
+            method = "getAttributeModifiers",
+            at = @At("RETURN")
+    )
+    private Multimap<String, AttributeModifier> socketed_vanillaItemStack_getAttributeModifiers(Multimap<String, AttributeModifier> original, EntityEquipmentSlot slot) {
+        ItemStack stack = (ItemStack)(Object)this;
+        if(stack.isEmpty()) return original;
+
+        boolean isHand = slot == EntityEquipmentSlot.MAINHAND;
+        boolean isBody = slot.getSlotType() == EntityEquipmentSlot.Type.ARMOR;
+        if(!isHand && !isBody) return original;
+
+        EntityEquipmentSlot defaultSlot = EntityLiving.getSlotForItemStack(stack);
+        if(defaultSlot != slot) return original;
+
+        ICapabilitySocketable cap = stack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
+        if(cap == null || cap.getGemCount() <= 0) return original;
+
+        Multimap<String, AttributeModifier> modified = HashMultimap.create(original);
+        List<String> allowedAttributes = isHand ?
+                Arrays.asList(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), SharedMonsterAttributes.ATTACK_SPEED.getName(), EntityPlayer.REACH_DISTANCE.getName()) :
+                Arrays.asList(SharedMonsterAttributes.ARMOR.getName(), SharedMonsterAttributes.ARMOR_TOUGHNESS.getName());
+        ISlotType slotType = isHand ? SocketedSlotTypes.HAND : SocketedSlotTypes.fromEntityEquipmentSlot(slot);
+
+        for(GenericGemEffect effect : cap.getAllActiveEffects(slotType)) {
+            if(!(effect instanceof AttributeGemEffect)) continue;
+            AttributeGemEffect attrEffect = (AttributeGemEffect)effect;
+            AttributeModifier modifier = attrEffect.getModifier();
+            if(modifier == null) continue;
+            if(allowedAttributes.contains(attrEffect.getAttribute())) {
+                modified.put(attrEffect.getAttribute(), modifier);
+            }
+        }
+        return modified;
+    }
+
     @Inject(
             method = "isItemEnchantable",
             at = @At("HEAD"),
