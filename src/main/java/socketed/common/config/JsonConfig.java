@@ -126,8 +126,6 @@ public class JsonConfig {
         SocketedUtil.registerCondition(PotionActiveCondition.TYPE_NAME, PotionActiveCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(HealthPercentCondition.TYPE_NAME, HealthPercentCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(ElevationCondition.TYPE_NAME, ElevationCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(IsBurningCondition.TYPE_NAME, IsBurningCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(IsWetCondition.TYPE_NAME, IsWetCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(LightLevelCondition.TYPE_NAME, LightLevelCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(IsBossCondition.TYPE_NAME, IsBossCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(BiomeCondition.TYPE_NAME, BiomeCondition.class, Socketed.MODID);
@@ -137,10 +135,10 @@ public class JsonConfig {
         SocketedUtil.registerCondition(IsSpecificEntityCondition.TYPE_NAME, IsSpecificEntityCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(DistanceCondition.TYPE_NAME, DistanceCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(AttackCooldownCondition.TYPE_NAME, AttackCooldownCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(IsMountedCondition.TYPE_NAME, IsMountedCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(CreatureAttributeCondition.TYPE_NAME, CreatureAttributeCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(WeatherCondition.TYPE_NAME, WeatherCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(BlockCondition.TYPE_NAME, BlockCondition.class, Socketed.MODID);
+        SocketedUtil.registerCondition(EntityStateCondition.TYPE_NAME, EntityStateCondition.class, Socketed.MODID);
         
         SocketedUtil.registerSlotTypes(SocketedSlotTypes.class, Socketed.MODID);
         
