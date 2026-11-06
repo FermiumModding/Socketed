@@ -66,6 +66,7 @@ dependencies {
 
     implementation fg.deobf("curse.maven:fermiumbooter-${fermiumbooter_version}")
     compileOnly fg.deobf("curse.maven:firstaid-${firstaid_version}")
+    compileOnly fg.deobf("curse.maven:rlcombat-${rlcombat_version}")
 }
 
 mixin {

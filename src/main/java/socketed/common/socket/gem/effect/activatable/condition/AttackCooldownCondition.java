@@ -28,7 +28,7 @@ public class AttackCooldownCondition extends GenericCondition {
 	
 	@Override
 	public boolean testCondition(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
-		return getAttackStrength(playerSource) >= this.cooldown; //TODO: RLCombat compat needed probably?
+		return getAttackStrength(playerSource) >= this.cooldown;
 	}
 	
 	@Override
@@ -50,6 +50,10 @@ public class AttackCooldownCondition extends GenericCondition {
 		return player.getCooledAttackStrength(0.5F);
 	}
 	
+	public static void recordStrength(EntityPlayer player, float strength) {
+		recordedStrengths.put(player, new RecordedStrength(strength, player.ticksExisted));
+	}
+
 	@Mod.EventBusSubscriber
 	public static class EventHandler {
 		
@@ -57,7 +61,7 @@ public class AttackCooldownCondition extends GenericCondition {
 		public static void onAttackEntity(AttackEntityEvent event) {
 			EntityPlayer player = event.getEntityPlayer();
 			if(player == null || player.world.isRemote) return;
-			recordedStrengths.put(player, new RecordedStrength(player.getCooledAttackStrength(0.5F), player.ticksExisted));
+			recordStrength(player, player.getCooledAttackStrength(0.5F));
 		}
 	}
 	

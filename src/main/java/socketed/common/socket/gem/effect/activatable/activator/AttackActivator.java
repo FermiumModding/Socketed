@@ -23,7 +23,10 @@ import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
 import socketed.api.socket.gem.effect.activatable.callback.GenericEventCallback;
 import socketed.common.socket.gem.effect.activatable.condition.DamageSourceCondition;
 import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
+import socketed.api.socket.gem.effect.slot.ISlotType;
 import socketed.api.socket.gem.effect.slot.SocketedSlotTypes;
+import socketed.common.compat.CompatUtil;
+import socketed.common.compat.RLCombatCompat;
 
 import javax.annotation.Nullable;
 
@@ -165,8 +168,8 @@ public abstract class AttackActivator extends GenericActivator {
 			ICapabilitySocketable sockets = weaponStack.getCapability(CapabilitySocketableHandler.CAP_SOCKETABLE, null);
 			if(sockets == null) return;
 			
-			//TODO: RLCombat compat to get whether the attack is being posted from mainhand or offhand for more accurate slot type check
-			for(GenericGemEffect effect : sockets.getAllActiveEffects(SocketedSlotTypes.HAND)) {
+			ISlotType attackingHand = CompatUtil.rlcombat.isLoaded() && RLCombatCompat.isOffhandAttack(player) ? SocketedSlotTypes.OFFHAND : SocketedSlotTypes.MAINHAND;
+			for(GenericGemEffect effect : sockets.getAllActiveEffects(attackingHand)) {
 				if(effect instanceof ActivatableGemEffect && ((ActivatableGemEffect)effect).getActivator() instanceof AttackingActivator) {
 					AttackingActivator activator = (AttackingActivator)((ActivatableGemEffect)effect).getActivator();
 					activator.attemptAttackActivation((ActivatableGemEffect)effect, callback, player, target, true, type);

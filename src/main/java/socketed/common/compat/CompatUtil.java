@@ -4,6 +4,7 @@ import net.minecraftforge.fml.common.Loader;
 
 public class CompatUtil {
     public static final LoadedContainer firstaid = new LoadedContainer("firstaid");
+    public static final LoadedContainer rlcombat = new LoadedContainer("bettercombatmod");
 
     public static class LoadedContainer {
         private final String key;

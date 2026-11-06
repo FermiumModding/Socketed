@@ -22,6 +22,7 @@ import socketed.api.common.capabilities.socketable.CapabilitySocketableHandler;
 import socketed.common.command.AddSocketCommand;
 import socketed.common.compat.CompatUtil;
 import socketed.common.compat.FirstAidCompat;
+import socketed.common.compat.RLCombatCompat;
 import socketed.common.config.JsonConfig;
 import socketed.common.container.GuiHandlerSocketing;
 import socketed.common.init.ModBlocks;
@@ -58,6 +59,7 @@ public class Socketed {
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, new GuiHandlerSocketing());
 
         if(CompatUtil.firstaid.isLoaded()) MinecraftForge.EVENT_BUS.register(FirstAidCompat.class);
+        if(CompatUtil.rlcombat.isLoaded()) MinecraftForge.EVENT_BUS.register(RLCombatCompat.class);
     }
     
     @Mod.EventHandler
