@@ -322,6 +322,18 @@ socketed.tooltip.default.skullcreeper.desc=Can't get targeted by Creepers
 socketed.tooltip.default.skullskeleton=Bad Skeleton!
 socketed.tooltip.default.skullskeleton.desc=Can't get targeted by Skeletons
 
+socketed.tooltip.default.end_rod=Stormcaller
+socketed.tooltip.default.end_rod.desc=Attack has chance to strike targets in the rain with lightning
+
+socketed.tooltip.default.dragon_breath=Dragon's fury
+socketed.tooltip.default.dragon_breath.desc=Getting hit on low health damages nearby enemies
+
+socketed.tooltip.default.fire_charge=Marksman
+socketed.tooltip.default.fire_charge.desc=Extra damage to targets more than 16 blocks away
+
+socketed.tooltip.default.skulldragon=Dragonborn
+socketed.tooltip.default.skulldragon.desc=Strength I and Resistance I in the End
+
 # Combination
 
 socketed.tooltip.default.combination0=Common gaming

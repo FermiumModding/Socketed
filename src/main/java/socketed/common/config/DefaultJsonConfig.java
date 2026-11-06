@@ -771,6 +771,58 @@ public abstract class DefaultJsonConfig {
                 )),
                 Collections.singletonList(new ItemFilter("minecraft:skull", 0, true))));
 
+        registerDefaultGemType("end_rod", new GemType("socketed.tooltip.default.end_rod", 3, TextFormatting.WHITE,
+                Collections.singletonList(new LightningGemEffect(
+                        SocketedSlotTypes.HAND,
+                        new AttackingActivator(new MultiCondition(MultiCondition.ConditionLogicType.AND, Arrays.asList(
+                                new WeatherCondition(WeatherCondition.WeatherType.RAIN, true, false),
+                                new ChanceCondition(0.25F))),
+                                true, AttackActivator.EventType.HURT),
+                        ONLYOTHER,
+                        5.0F, false, false,
+                        "socketed.tooltip.default.end_rod.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:end_rod", 0, false))));
+
+        registerDefaultGemType("dragon_breath", new GemType("socketed.tooltip.default.dragon_breath", 3, TextFormatting.LIGHT_PURPLE,
+                Collections.singletonList(new DamageGemEffect(
+                        SocketedSlotTypes.BODY,
+                        new AttackedActivator(new HealthPercentCondition(0.5F, ComparingCondition.ConditionComparisonType.LESS_EQUAL, true), false, AttackActivator.EventType.HURT),
+                        Arrays.asList(new OtherTarget(null), new SelfAOETarget(null, 4)),
+                        4.0F, "magic", true, false,
+                        "socketed.tooltip.default.dragon_breath.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:dragon_breath", 0, false))));
+
+        registerDefaultGemType("fire_charge", new GemType("socketed.tooltip.default.fire_charge", 3, TextFormatting.GOLD,
+                Collections.singletonList(new DamageModifierGemEffect(
+                        SocketedSlotTypes.MAINHAND,
+                        new AttackingActivator(new InvertedCondition(new DistanceCondition(16.0F)), true, AttackActivator.EventType.HURT),
+                        ONLYOTHER,
+                        1.3F, DamageModifierGemEffect.Operation.MULTIPLY,
+                        "socketed.tooltip.default.fire_charge.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:fire_charge", 0, false))));
+
+        registerDefaultGemType("skulldragon", new GemType("socketed.tooltip.default.skulldragon", 3, TextFormatting.DARK_PURPLE,
+                Collections.singletonList(new MultiEffectGemEffect(
+                        SocketedSlotTypes.HEAD,
+                        new PassiveActivator(new DimensionCondition(1, null), 39),
+                        ONLYSELF,
+                        Arrays.asList(
+                                new PotionGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
+                                        MobEffects.STRENGTH.getRegistryName().toString(), 0, 40,
+                                        ""
+                                ),
+                                new PotionGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
+                                        MobEffects.RESISTANCE.getRegistryName().toString(), 0, 40,
+                                        ""
+                                )
+                        ),
+                        "socketed.tooltip.default.skulldragon.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:skull", 5, true))));
+
         //Combinations
 
         registerDefaultGemCombinationType("combination0", new GemCombinationType("socketed.tooltip.default.combination0", TextFormatting.DARK_GREEN,
