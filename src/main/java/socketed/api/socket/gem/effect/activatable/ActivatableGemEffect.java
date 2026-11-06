@@ -15,7 +15,9 @@ import socketed.api.socket.gem.effect.slot.ISlotType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public abstract class ActivatableGemEffect extends GenericGemEffect {
 
@@ -74,9 +76,25 @@ public abstract class ActivatableGemEffect extends GenericGemEffect {
      * @param effectTarget the entity involved in this effect being triggered, may be the same as the player
      */
     public void affectTargets(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
-        for(GenericTarget target : this.targets) {
-            target.affectTarget(this, callback, playerSource, effectTarget);
+        performingDepth.merge(playerSource, 1, Integer::sum);
+        try {
+            for(GenericTarget target : this.targets) {
+                target.affectTarget(this, callback, playerSource, effectTarget);
+            }
         }
+        finally {
+            performingDepth.computeIfPresent(playerSource, (player, depth) -> depth <= 1 ? null : depth - 1);
+        }
+    }
+
+    private static final Map<EntityPlayer, Integer> performingDepth = new HashMap<>();
+
+    /**
+     * Used to prevent damage dealt by a player's effects (such as Lightning or Explosion) from triggering that player's attacking effects
+     * @return true if the player's effects are currently being performed
+     */
+    public static boolean isPerformingEffects(EntityPlayer player) {
+        return performingDepth.containsKey(player);
     }
     
     /**

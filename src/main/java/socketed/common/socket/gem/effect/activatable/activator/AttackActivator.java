@@ -135,7 +135,7 @@ public abstract class AttackActivator extends GenericActivator {
 			}
 			
 			//AttackingActivator handling
-			if(attacker instanceof EntityPlayer) {
+			if(attacker instanceof EntityPlayer && !ActivatableGemEffect.isPerformingEffects((EntityPlayer)attacker)) {
 				handleAttacking(callback, (EntityPlayer)attacker, target, type);
 			}
 		}
