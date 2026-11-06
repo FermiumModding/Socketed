@@ -92,6 +92,7 @@ socketed.tooltip.effect.cleanse.beneficial=Dispel Beneficial Effects
 socketed.tooltip.effect.cleanse.all=Cleanse All Effects
 socketed.tooltip.effect.cleanse.potion=Cleanse %s
 socketed.tooltip.effect.disableshield=Disable Shield %ss
+socketed.tooltip.effect.randomteleport=Random Teleport %d
 
 socketed.tooltip.effect.plusenchantment=+%d %s
 
