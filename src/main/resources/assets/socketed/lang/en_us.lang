@@ -199,6 +199,33 @@ socketed.tooltip.default.sticky_piston.desc=Attacking pulls mobs to you
 socketed.tooltip.default.diamond=Diamond reinforced
 socketed.tooltip.default.flint=Pew pew
 
+socketed.tooltip.default.pumpkin=Don't look at me
+socketed.tooltip.default.pumpkin.desc=Endermen lose interest in you
+
+socketed.tooltip.default.glistering_melon=Glistening
+socketed.tooltip.default.glistering_melon.desc=Heal on kill
+
+socketed.tooltip.default.magma_cream=Fireproof
+socketed.tooltip.default.magma_cream.desc=Taking fire or lava damage halves it and grants Fire Resistance
+
+socketed.tooltip.default.prismarine_crystals=Deep breath
+socketed.tooltip.default.prismarine_crystals.desc=Chance to negate drowning damage
+
+socketed.tooltip.default.prismarine_shard=Impaling
+socketed.tooltip.default.prismarine_shard.desc=Extra damage to targets in water
+
+socketed.tooltip.default.packed_ice=Frosty feet
+socketed.tooltip.default.packed_ice.desc=Speed I in snowy biomes
+
+socketed.tooltip.default.firework=Liftoff
+socketed.tooltip.default.firework.desc=Sprint jumping launches you higher
+
+socketed.tooltip.default.spectral_arrow=Spotter
+socketed.tooltip.default.spectral_arrow.desc=Ranged hits inflict Glowing
+
+socketed.tooltip.default.magma_block=Hot plate
+socketed.tooltip.default.magma_block.desc=Blocking melee attacks sets the attacker on fire
+
 # Tier 2
 
 socketed.tooltip.default.rabbitfoot=Uppies

@@ -269,6 +269,112 @@ public abstract class DefaultJsonConfig {
                         "minecraft:power", 1)),
                 Collections.singletonList(new ItemFilter("minecraft:flint", 0, false))));
 
+        registerDefaultGemType("pumpkin", new GemType("socketed.tooltip.default.pumpkin", 1, TextFormatting.GOLD,
+                Collections.singletonList(new LoseTargetGemEffect(
+                        SocketedSlotTypes.HEAD,
+                        new TargetedActivator(new IsSpecificEntityCondition("minecraft:enderman")),
+                        ONLYOTHER,
+                        "socketed.tooltip.default.pumpkin.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:pumpkin", 0, false))));
+
+        registerDefaultGemType("glistering_melon", new GemType("socketed.tooltip.default.glistering_melon", 1, TextFormatting.RED,
+                Collections.singletonList(new HealGemEffect(
+                        SocketedSlotTypes.BODY,
+                        new KillActivator(null),
+                        ONLYSELF,
+                        2.0F, 0.0F,
+                        "socketed.tooltip.default.glistering_melon.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:speckled_melon", 0, false))));
+
+        registerDefaultGemType("magma_cream", new GemType("socketed.tooltip.default.magma_cream", 1, TextFormatting.GOLD,
+                Collections.singletonList(new MultiEffectGemEffect(
+                        SocketedSlotTypes.BODY,
+                        new EnvironmentalDamageActivator(
+                                new MultiCondition(MultiCondition.ConditionLogicType.OR, Arrays.asList(
+                                        new DamageSourceCondition(false, false, "lava"),
+                                        new DamageSourceCondition(false, false, "inFire"),
+                                        new DamageSourceCondition(false, false, "onFire"))),
+                                AttackActivator.EventType.HURT),
+                        ONLYSELF,
+                        Arrays.asList(
+                                new DamageModifierGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
+                                        0.5F, DamageModifierGemEffect.Operation.MULTIPLY,
+                                        ""
+                                ),
+                                new PotionGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
+                                        MobEffects.FIRE_RESISTANCE.getRegistryName().toString(), 0, 60,
+                                        ""
+                                )
+                        ),
+                        "socketed.tooltip.default.magma_cream.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:magma_cream", 0, false))));
+
+        registerDefaultGemType("prismarine_crystals", new GemType("socketed.tooltip.default.prismarine_crystals", 1, TextFormatting.AQUA,
+                Collections.singletonList(new CancelEventGemEffect(
+                        SocketedSlotTypes.HEAD,
+                        new EnvironmentalDamageActivator(
+                                new MultiCondition(MultiCondition.ConditionLogicType.AND, Arrays.asList(
+                                        new DamageSourceCondition(false, false, "drown"),
+                                        new ChanceCondition(0.5F))),
+                                AttackActivator.EventType.ATTACK),
+                        ONLYSELF,
+                        "socketed.tooltip.default.prismarine_crystals.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:prismarine_crystals", 0, false))));
+
+        registerDefaultGemType("prismarine_shard", new GemType("socketed.tooltip.default.prismarine_shard", 1, TextFormatting.DARK_AQUA,
+                Collections.singletonList(new DamageModifierGemEffect(
+                        SocketedSlotTypes.HAND,
+                        new AttackingActivator(new EntityStateCondition(EntityStateCondition.EntityState.IN_WATER, false), true, AttackActivator.EventType.HURT),
+                        ONLYOTHER,
+                        1.25F, DamageModifierGemEffect.Operation.MULTIPLY,
+                        "socketed.tooltip.default.prismarine_shard.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:prismarine_shard", 0, false))));
+
+        registerDefaultGemType("packed_ice", new GemType("socketed.tooltip.default.packed_ice", 1, TextFormatting.AQUA,
+                Collections.singletonList(new PotionGemEffect(
+                        SocketedSlotTypes.FEET,
+                        new PassiveActivator(new BiomeTypeCondition("SNOWY"), 39),
+                        ONLYSELF,
+                        MobEffects.SPEED.getRegistryName().toString(), 0, 40,
+                        "socketed.tooltip.default.packed_ice.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:packed_ice", 0, false))));
+
+        registerDefaultGemType("firework", new GemType("socketed.tooltip.default.firework", 1, TextFormatting.RED,
+                Collections.singletonList(new LaunchGemEffect(
+                        SocketedSlotTypes.FEET,
+                        new JumpActivator(new EntityStateCondition(EntityStateCondition.EntityState.SPRINTING, true)),
+                        ONLYSELF,
+                        0.3F,
+                        "socketed.tooltip.default.firework.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:fireworks", 0, false))));
+
+        registerDefaultGemType("spectral_arrow", new GemType("socketed.tooltip.default.spectral_arrow", 1, TextFormatting.YELLOW,
+                Collections.singletonList(new PotionGemEffect(
+                        SocketedSlotTypes.HAND,
+                        new AttackingActivator(new DamageSourceCondition(false, true, ""), true, AttackActivator.EventType.HURT),
+                        ONLYOTHER,
+                        MobEffects.GLOWING.getRegistryName().toString(), 0, 200,
+                        "socketed.tooltip.default.spectral_arrow.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:spectral_arrow", 0, false))));
+
+        registerDefaultGemType("magma_block", new GemType("socketed.tooltip.default.magma_block", 1, TextFormatting.DARK_RED,
+                Collections.singletonList(new IgniteGemEffect(
+                        SocketedSlotTypes.HAND,
+                        new BlockingActivator(new DamageSourceCondition(true, false, ""), true),
+                        ONLYOTHER,
+                        3,
+                        "socketed.tooltip.default.magma_block.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:magma", 0, false))));
+
         //Tier 2
 
         registerDefaultGemType("rabbitfoot", new GemType("socketed.tooltip.default.rabbitfoot", 2, TextFormatting.YELLOW,
