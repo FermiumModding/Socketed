@@ -966,5 +966,74 @@ public abstract class DefaultJsonConfig {
                 "socketed.tooltip.default.fortress.desc"
             ))
         ));
+
+        registerDefaultGemCombinationType("tempest", new GemCombinationType("socketed.tooltip.default.tempest", TextFormatting.WHITE,
+            false, false, false, false,
+            Arrays.asList("end_rod", "fire_charge", "spectral_arrow"),
+            Collections.singletonList(new LightningGemEffect(
+                SocketedSlotTypes.MAINHAND,
+                new AttackingActivator(new MultiCondition(MultiCondition.ConditionLogicType.AND, Arrays.asList(
+                        new DamageSourceCondition(false, true, ""),
+                        new WeatherCondition(WeatherCondition.WeatherType.RAIN, true, false))),
+                        true, AttackActivator.EventType.HURT),
+                ONLYOTHER,
+                4.0F, false, false,
+                "socketed.tooltip.default.tempest.desc"
+            ))
+        ));
+
+        registerDefaultGemCombinationType("vampiric", new GemCombinationType("socketed.tooltip.default.vampiric", TextFormatting.DARK_RED,
+            false, false, false, false,
+            Arrays.asList("nether_wart", "fermented_spider_eye"),
+            Collections.singletonList(new MultiEffectGemEffect(
+                SocketedSlotTypes.HAND,
+                new AttackingActivator(new AttackCooldownCondition(0.9F), true, AttackActivator.EventType.HURT),
+                ONLYOTHER,
+                Arrays.asList(
+                    new HealGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
+                        0.0F, 0.1F,
+                        ""
+                    ),
+                    new CleanseGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYOTHER,
+                        CleanseGemEffect.CleanseType.BENEFICIAL, null,
+                        ""
+                    )
+                ),
+                "socketed.tooltip.default.vampiric.desc"
+            ))
+        ));
+
+        registerDefaultGemCombinationType("withering", new GemCombinationType("socketed.tooltip.default.withering", TextFormatting.DARK_GRAY,
+            false, false, false, false,
+            Arrays.asList("soul_sand", "nether_wart", "blazerod"),
+            Collections.singletonList(new PotionGemEffect(
+                SocketedSlotTypes.HAND,
+                new AttackingActivator(null, true, AttackActivator.EventType.HURT),
+                ONLYOTHER,
+                MobEffects.WITHER.getRegistryName().toString(), 0, 60,
+                "socketed.tooltip.default.withering.desc"
+            ))
+        ));
+
+        registerDefaultGemCombinationType("heavy", new GemCombinationType("socketed.tooltip.default.heavy", TextFormatting.GRAY,
+            false, false, false, false,
+            Arrays.asList("anvil", "iron", "obsidian"),
+            Arrays.asList(
+                new DisableShieldGemEffect(
+                    SocketedSlotTypes.HAND,
+                    new AttackingActivator(null, true, AttackActivator.EventType.ATTACK),
+                    ONLYOTHER,
+                    100,
+                    "socketed.tooltip.default.heavy.desc.1"
+                ),
+                new KnockbackGemEffect(
+                    SocketedSlotTypes.HAND,
+                    new AttackingActivator(null, true, AttackActivator.EventType.HURT),
+                    ONLYOTHER,
+                    1.0F, false,
+                    "socketed.tooltip.default.heavy.desc.2"
+                )
+            )
+        ));
     }
 }

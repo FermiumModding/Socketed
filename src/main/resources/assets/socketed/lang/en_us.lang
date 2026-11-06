@@ -357,3 +357,16 @@ socketed.tooltip.default.alchemist.desc=Kills heal and cleanse harmful effects
 
 socketed.tooltip.default.fortress=Fortress
 socketed.tooltip.default.fortress.desc=Fire Resistance in the Nether
+
+socketed.tooltip.default.tempest=Tempest
+socketed.tooltip.default.tempest.desc=Ranged hits strike targets in the rain with lightning
+
+socketed.tooltip.default.vampiric=Vampiric
+socketed.tooltip.default.vampiric.desc=Fully charged attacks heal more and dispel beneficial effects
+
+socketed.tooltip.default.withering=Withering
+socketed.tooltip.default.withering.desc=Attacks inflict Wither I
+
+socketed.tooltip.default.heavy=Heavy
+socketed.tooltip.default.heavy.desc.1=Attacks always disable shields
+socketed.tooltip.default.heavy.desc.2=Attacks knockback
