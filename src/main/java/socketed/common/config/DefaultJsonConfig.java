@@ -229,6 +229,17 @@ public abstract class DefaultJsonConfig {
                                 SocketedSlotTypes.FEET, PASSIVEFAST, ONLYSELF,
                                 MobEffects.JUMP_BOOST.getRegistryName().toString(), 0, 40,
                                 "socketed.tooltip.default.rabbitfoot.desc"
+                        ),
+                        new PotionGemEffect(
+                                SocketedSlotTypes.FEET,
+                                new PassiveActivator(
+                                        new MultiCondition(MultiCondition.ConditionLogicType.AND, Arrays.asList(
+                                                new MoonPhaseCondition(MoonPhaseCondition.MoonPhase.FULL_MOON),
+                                                new TimeOfDayCondition(TimeOfDayCondition.TimePreset.NIGHT, null, null))),
+                                        39),
+                                ONLYSELF,
+                                MobEffects.LUCK.getRegistryName().toString(), 0, 40,
+                                "socketed.tooltip.default.rabbitfoot.desc.2"
                         )),
                 Collections.singletonList(new ItemFilter("minecraft:rabbit_foot", 0, false))));
 

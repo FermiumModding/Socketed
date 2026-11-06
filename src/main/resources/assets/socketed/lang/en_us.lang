@@ -188,6 +188,7 @@ socketed.tooltip.default.flint=Pew pew
 
 socketed.tooltip.default.rabbitfoot=Uppies
 socketed.tooltip.default.rabbitfoot.desc=Jump Boost I passively
+socketed.tooltip.default.rabbitfoot.desc.2=Luck I at night during a full moon
 
 socketed.tooltip.default.gapple=It's a Gold Apple
 socketed.tooltip.default.gapple.desc=Passive chance for Absorption I
