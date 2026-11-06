@@ -131,6 +131,7 @@ public class JsonConfig {
         SocketedUtil.registerCondition(DistanceCondition.TYPE_NAME, DistanceCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(AttackCooldownCondition.TYPE_NAME, AttackCooldownCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(IsMountedCondition.TYPE_NAME, IsMountedCondition.class, Socketed.MODID);
+        SocketedUtil.registerCondition(CreatureAttributeCondition.TYPE_NAME, CreatureAttributeCondition.class, Socketed.MODID);
         
         SocketedUtil.registerSlotTypes(SocketedSlotTypes.class, Socketed.MODID);
         
