@@ -13,7 +13,7 @@ import socketed.api.common.capabilities.effectscache.CapabilityEffectsCacheHandl
 import socketed.api.common.capabilities.effectscache.ICapabilityEffectsCache;
 import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
 import socketed.api.socket.gem.effect.activatable.activator.GenericActivator;
-import socketed.api.socket.gem.effect.activatable.callback.CancelEventCallback;
+import socketed.api.socket.gem.effect.activatable.callback.GenericEventCallback;
 import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
 
 import javax.annotation.Nullable;
@@ -30,11 +30,11 @@ public class KillActivator extends GenericActivator {
 	 * Called on LivingDeathEvent when the player is the true source of the killing damage (melee or ranged)
 	 * If the callback is cancelled, cancels the death and sets the killed entity's health to a minimum of 1.0
 	 * @param effect the effect parent of this activator
-	 * @param callback the CancelEventCallback to allow for the effect to cancel the death
+	 * @param callback the LivingDeathEvent callback, allows conditions such as Damage Source and effects to cancel the death
 	 * @param player the player that is the source of the effect
 	 * @param killed the entity that was killed
 	 */
-	protected void attemptKillActivation(ActivatableGemEffect effect, CancelEventCallback callback, EntityPlayer player, EntityLivingBase killed) {
+	protected void attemptKillActivation(ActivatableGemEffect effect, GenericEventCallback<LivingDeathEvent> callback, EntityPlayer player, EntityLivingBase killed) {
 		if(this.testCondition(callback, player, killed)) {
 			effect.affectTargets(callback, player, killed);
 		}
@@ -70,12 +70,11 @@ public class KillActivator extends GenericActivator {
 			ICapabilityEffectsCache cachedEffects = player.getCapability(CapabilityEffectsCacheHandler.CAP_EFFECTS_CACHE, null);
 			if(cachedEffects == null) return;
 
-			CancelEventCallback callback = new CancelEventCallback(false);
+			GenericEventCallback<LivingDeathEvent> callback = new GenericEventCallback<>(event);
 			for(ActivatableGemEffect effect : cachedEffects.getEffectsForActivator(KillActivator.class)) {
 				((KillActivator)effect.getActivator()).attemptKillActivation(effect, callback, player, killed);
 
-				if(callback.isCancelled()) {
-					event.setCanceled(true);
+				if(event.isCanceled()) {
 					if(killed.getHealth() <= 0.0F) killed.setHealth(1.0F);
 					return;
 				}
