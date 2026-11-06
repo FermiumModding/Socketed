@@ -107,6 +107,7 @@ public class JsonConfig {
         SocketedUtil.registerActivator(DeathTotemCheckActivator.TYPE_NAME, DeathTotemCheckActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(MultiEffectActivator.TYPE_NAME, MultiEffectActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(TargetedActivator.TYPE_NAME, TargetedActivator.class, Socketed.MODID);
+        SocketedUtil.registerActivator(KillActivator.TYPE_NAME, KillActivator.class, Socketed.MODID);
         
         SocketedUtil.registerTarget(SelfTarget.TYPE_NAME, SelfTarget.class, Socketed.MODID);
         SocketedUtil.registerTarget(OtherTarget.TYPE_NAME, OtherTarget.class, Socketed.MODID);

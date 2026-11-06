@@ -100,6 +100,7 @@ socketed.tooltip.activator.attacking=Attacking
 socketed.tooltip.activator.deathtotemcheck=Death Totem Check
 socketed.tooltip.activator.passive=Every %d Ticks
 socketed.tooltip.activator.targeted=Targeted
+socketed.tooltip.activator.kill=Kill
 
 socketed.tooltip.target.otheraoe=Other AOE
 socketed.tooltip.target.other=Other
