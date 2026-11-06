@@ -498,6 +498,146 @@ public abstract class DefaultJsonConfig {
                 Collections.singletonList(new AttributeGemEffect(SocketedSlotTypes.HEAD, SocketedAttributes.TRADECOST.getName(), new RandomValueRange(-0.2F, false), 2)),
                 Collections.singletonList(new OreFilter("blockEmerald"))));
 
+        registerDefaultGemType("ender_pearl", new GemType("socketed.tooltip.default.ender_pearl", 2, TextFormatting.DARK_AQUA,
+                Collections.singletonList(new MultiEffectGemEffect(
+                        SocketedSlotTypes.CHEST,
+                        new AttackedActivator(
+                                new MultiCondition(MultiCondition.ConditionLogicType.AND, Arrays.asList(
+                                        new DamageSourceCondition(false, true, ""),
+                                        new ChanceCondition(0.3F))),
+                                false, AttackActivator.EventType.HURT),
+                        ONLYSELF,
+                        Arrays.asList(
+                                new CancelEventGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
+                                        ""
+                                ),
+                                new RandomTeleportGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
+                                        8,
+                                        ""
+                                )
+                        ),
+                        "socketed.tooltip.default.ender_pearl.desc"
+                )),
+                Collections.singletonList(new OreFilter("enderpearl"))));
+
+        registerDefaultGemType("chorus_fruit", new GemType("socketed.tooltip.default.chorus_fruit", 2, TextFormatting.LIGHT_PURPLE,
+                Collections.singletonList(new RandomTeleportGemEffect(
+                        SocketedSlotTypes.CHEST,
+                        new AttackedActivator(
+                                new MultiCondition(MultiCondition.ConditionLogicType.AND, Arrays.asList(
+                                        new HealthPercentCondition(0.3F, ComparingCondition.ConditionComparisonType.LESS_EQUAL, true),
+                                        new ChanceCondition(0.2F))),
+                                false, AttackActivator.EventType.HURT),
+                        ONLYSELF,
+                        16,
+                        "socketed.tooltip.default.chorus_fruit.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:chorus_fruit", 0, false))));
+
+        registerDefaultGemType("slime_block", new GemType("socketed.tooltip.default.slime_block", 2, TextFormatting.GREEN,
+                Collections.singletonList(new MultiEffectGemEffect(
+                        SocketedSlotTypes.FEET,
+                        new FallActivator(null, 3.0F),
+                        ONLYSELF,
+                        Arrays.asList(
+                                new CancelEventGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
+                                        ""
+                                ),
+                                new LaunchGemEffect(SocketedSlotTypes.ALL,
+                                        new MultiEffectActivator(new InvertedCondition(new EntityStateCondition(EntityStateCondition.EntityState.SNEAKING, true))),
+                                        ONLYSELF,
+                                        0.5F,
+                                        ""
+                                )
+                        ),
+                        "socketed.tooltip.default.slime_block.desc"
+                )),
+                Collections.singletonList(new OreFilter("blockSlime"))));
+
+        registerDefaultGemType("milk_bucket", new GemType("socketed.tooltip.default.milk_bucket", 2, TextFormatting.WHITE,
+                Collections.singletonList(new CleanseGemEffect(
+                        SocketedSlotTypes.BODY,
+                        new PassiveActivator(null, 200),
+                        ONLYSELF,
+                        CleanseGemEffect.CleanseType.HARMFUL, null,
+                        "socketed.tooltip.default.milk_bucket.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:milk_bucket", 0, false))));
+
+        registerDefaultGemType("fermented_spider_eye", new GemType("socketed.tooltip.default.fermented_spider_eye", 2, TextFormatting.DARK_PURPLE,
+                Collections.singletonList(new CleanseGemEffect(
+                        SocketedSlotTypes.HAND,
+                        new AttackingActivator(new ChanceCondition(0.15F), true, AttackActivator.EventType.HURT),
+                        ONLYOTHER,
+                        CleanseGemEffect.CleanseType.BENEFICIAL, null,
+                        "socketed.tooltip.default.fermented_spider_eye.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:fermented_spider_eye", 0, false))));
+
+        registerDefaultGemType("nether_wart", new GemType("socketed.tooltip.default.nether_wart", 2, TextFormatting.DARK_RED,
+                Collections.singletonList(new HealGemEffect(
+                        SocketedSlotTypes.HAND,
+                        new AttackingActivator(new AttackCooldownCondition(0.9F), true, AttackActivator.EventType.HURT),
+                        ONLYSELF,
+                        0.0F, 0.1F,
+                        "socketed.tooltip.default.nether_wart.desc"
+                )),
+                Collections.singletonList(new OreFilter("cropNetherWart"))));
+
+        registerDefaultGemType("gold_block", new GemType("socketed.tooltip.default.gold_block", 2, TextFormatting.GOLD,
+                Collections.singletonList(new BonusDropsGemEffect(
+                        SocketedSlotTypes.HAND,
+                        new KillActivator(new MultiCondition(MultiCondition.ConditionLogicType.AND, Arrays.asList(
+                                new ChanceCondition(0.15F),
+                                new InvertedCondition(new IsBossCondition())))),
+                        ONLYOTHER,
+                        1,
+                        "socketed.tooltip.default.gold_block.desc"
+                )),
+                Collections.singletonList(new OreFilter("blockGold"))));
+
+        registerDefaultGemType("lapis_block", new GemType("socketed.tooltip.default.lapis_block", 2, TextFormatting.BLUE,
+                Collections.singletonList(new BonusDropsGemEffect(
+                        SocketedSlotTypes.HAND,
+                        new BlockBreakActivator(new MultiCondition(MultiCondition.ConditionLogicType.AND, Arrays.asList(
+                                new BlockCondition(Arrays.asList(
+                                        new OreFilter("oreCoal"),
+                                        new OreFilter("oreLapis"),
+                                        new OreFilter("oreRedstone"),
+                                        new OreFilter("oreDiamond"),
+                                        new OreFilter("oreEmerald"),
+                                        new OreFilter("oreQuartz"))),
+                                new ChanceCondition(0.1F))),
+                                true),
+                        ONLYSELF,
+                        1,
+                        "socketed.tooltip.default.lapis_block.desc"
+                )),
+                Collections.singletonList(new OreFilter("blockLapis"))));
+
+        registerDefaultGemType("soul_sand", new GemType("socketed.tooltip.default.soul_sand", 2, TextFormatting.DARK_GRAY,
+                Collections.singletonList(new DamageModifierGemEffect(
+                        SocketedSlotTypes.HAND,
+                        new AttackingActivator(new MultiCondition(MultiCondition.ConditionLogicType.AND, Arrays.asList(
+                                new TimeOfDayCondition(TimeOfDayCondition.TimePreset.NIGHT, null, null),
+                                new LightLevelCondition(7, ComparingCondition.ConditionComparisonType.LESS_EQUAL, true))),
+                                true, AttackActivator.EventType.HURT),
+                        ONLYOTHER,
+                        1.2F, DamageModifierGemEffect.Operation.MULTIPLY,
+                        "socketed.tooltip.default.soul_sand.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:soul_sand", 0, false))));
+
+        registerDefaultGemType("nether_brick", new GemType("socketed.tooltip.default.nether_brick", 2, TextFormatting.DARK_RED,
+                Collections.singletonList(new DamageModifierGemEffect(
+                        SocketedSlotTypes.BODY,
+                        new AttackedActivator(new DimensionCondition(-1, null), false, AttackActivator.EventType.HURT),
+                        ONLYSELF,
+                        0.85F, DamageModifierGemEffect.Operation.MULTIPLY,
+                        "socketed.tooltip.default.nether_brick.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:nether_brick", 0, false))));
+
         //Tier 3
 
         registerDefaultGemType("ghasttear", new GemType("socketed.tooltip.default.ghasttear", 3, TextFormatting.WHITE,

@@ -261,6 +261,36 @@ socketed.tooltip.default.tnt.desc=Attacking has chance to create Explosions
 
 socketed.tooltip.default.quartz=XP Farm
 socketed.tooltip.default.emeraldblock=So cheap!
+
+socketed.tooltip.default.ender_pearl=Blink
+socketed.tooltip.default.ender_pearl.desc=Chance to teleport away from projectiles
+
+socketed.tooltip.default.chorus_fruit=Escape plan
+socketed.tooltip.default.chorus_fruit.desc=Getting hit on low health has chance to teleport you away
+
+socketed.tooltip.default.slime_block=Bouncy
+socketed.tooltip.default.slime_block.desc=Negate fall damage and bounce, sneak to land
+
+socketed.tooltip.default.milk_bucket=Got milk?
+socketed.tooltip.default.milk_bucket.desc=Periodically cleanse harmful effects
+
+socketed.tooltip.default.fermented_spider_eye=Corrupting
+socketed.tooltip.default.fermented_spider_eye.desc=Attack has chance to dispel beneficial effects
+
+socketed.tooltip.default.nether_wart=Bloodthirsty
+socketed.tooltip.default.nether_wart.desc=Fully charged attacks heal for part of the damage
+
+socketed.tooltip.default.gold_block=Midas touch
+socketed.tooltip.default.gold_block.desc=Kills have chance to drop extra loot
+
+socketed.tooltip.default.lapis_block=Lucky strike
+socketed.tooltip.default.lapis_block.desc=Mining ores has chance to drop extra resources
+
+socketed.tooltip.default.soul_sand=Nightstalker
+socketed.tooltip.default.soul_sand.desc=Extra damage at night in the dark
+
+socketed.tooltip.default.nether_brick=Fortified
+socketed.tooltip.default.nether_brick.desc=Take less damage in the Nether
 # Tier 3
 socketed.tooltip.default.ghasttear=Pretty Healthy for a Ghast
 socketed.tooltip.default.ghasttear.desc.1=Regeneration I passively
