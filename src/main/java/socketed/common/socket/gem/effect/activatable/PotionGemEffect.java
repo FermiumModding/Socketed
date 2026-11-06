@@ -17,7 +17,10 @@ import socketed.api.socket.gem.effect.activatable.target.GenericTarget;
 import socketed.api.socket.gem.effect.slot.ISlotType;
 
 import javax.annotation.Nullable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 public class PotionGemEffect extends ActivatableGemEffect {
     
@@ -55,6 +58,10 @@ public class PotionGemEffect extends ActivatableGemEffect {
     public void performEffect(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
         if(playerSource != null && effectTarget != null && !playerSource.world.isRemote) {
             effectTarget.addPotionEffect(new PotionEffect(this.potion, this.duration, this.amplifier));
+            if(effectTarget == playerSource) {
+                appliedToSelf.computeIfAbsent(playerSource, player -> new HashMap<>())
+                        .put(this.potion, new AppliedPotion(this.amplifier, playerSource.world.getTotalWorldTime() + this.duration));
+            }
         }
     }
     
@@ -63,9 +70,31 @@ public class PotionGemEffect extends ActivatableGemEffect {
         return TYPE_NAME;
     }
 
+    private static final Map<EntityPlayer, Map<Potion, AppliedPotion>> appliedToSelf = new WeakHashMap<>();
+
     @Override
     public void onUnequip(EntityPlayer player, ItemStack stack) {
-        player.removePotionEffect(this.potion);
+        Map<Potion, AppliedPotion> applied = appliedToSelf.get(player);
+        if(applied == null) return;
+        AppliedPotion record = applied.remove(this.potion);
+        if(record == null) return;
+
+        PotionEffect active = player.getActivePotionEffect(this.potion);
+        if(active == null || active.getAmplifier() != record.amplifier) return;
+        long expectedRemaining = record.endTime - player.world.getTotalWorldTime();
+        if(Math.abs(active.getDuration() - expectedRemaining) <= 2) {
+            player.removePotionEffect(this.potion);
+        }
+    }
+
+    private static class AppliedPotion {
+        private final int amplifier;
+        private final long endTime;
+
+        private AppliedPotion(int amplifier, long endTime) {
+            this.amplifier = amplifier;
+            this.endTime = endTime;
+        }
     }
     
     /**
