@@ -87,6 +87,10 @@ socketed.tooltip.effect.damagemodifier.multiply=x%s Damage
 socketed.tooltip.effect.heal=Heal %s
 socketed.tooltip.effect.heal.percent=Heal %s%% of Damage
 socketed.tooltip.effect.heal.both=Heal %s + %s%% of Damage
+socketed.tooltip.effect.cleanse.harmful=Cleanse Harmful Effects
+socketed.tooltip.effect.cleanse.beneficial=Dispel Beneficial Effects
+socketed.tooltip.effect.cleanse.all=Cleanse All Effects
+socketed.tooltip.effect.cleanse.potion=Cleanse %s
 
 socketed.tooltip.effect.plusenchantment=+%d %s
 
