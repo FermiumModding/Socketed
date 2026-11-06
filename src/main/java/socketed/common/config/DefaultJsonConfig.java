@@ -49,6 +49,7 @@ public abstract class DefaultJsonConfig {
         List<GenericTarget> ONLYOTHER = Collections.singletonList(new OtherTarget(null));
         List<GenericTarget> SELFAOE_NEAR = Collections.singletonList(new SelfAOETarget(null, 4));
         List<GenericTarget> SELFAOE_NEAR_HITSELF = new ArrayList<>(ONLYSELF); SELFAOE_NEAR_HITSELF.addAll(SELFAOE_NEAR);
+        List<GenericTarget> OTHER_AND_SELFAOE_NEAR = new ArrayList<>(ONLYOTHER); OTHER_AND_SELFAOE_NEAR.addAll(SELFAOE_NEAR);
         List<GenericTarget> OTHERAOE_NEAR = Arrays.asList(new OtherTarget(null), new OtherAOETarget(null, 3));
         MultiEffectActivator MULTIACT = new MultiEffectActivator(null);
         PassiveActivator PASSIVEFAST = new PassiveActivator(null, 39);
@@ -207,7 +208,7 @@ public abstract class DefaultJsonConfig {
                 Collections.singletonList(new PotionGemEffect(
                         SocketedSlotTypes.LEGS,
                         new AttackedActivator(new ChanceCondition(0.2F), false, AttackActivator.EventType.HURT),
-                        Collections.singletonList(new SelfAOETarget(null, 6)),
+                        Arrays.asList(new OtherTarget(null), new SelfAOETarget(null, 6)),
                         MobEffects.SLOWNESS.getRegistryName().toString(), 0, 80,
                         "socketed.tooltip.default.cobweb.desc"
                 )),
@@ -438,7 +439,7 @@ public abstract class DefaultJsonConfig {
                 Collections.singletonList(new PotionGemEffect(
                         SocketedSlotTypes.BODY,
                         new AttackedActivator(new HealthPercentCondition(0.5F, ComparingCondition.ConditionComparisonType.LESS_EQUAL, true), false, AttackActivator.EventType.HURT),
-                        SELFAOE_NEAR,
+                        OTHER_AND_SELFAOE_NEAR,
                         MobEffects.WITHER.getRegistryName().toString(), 0, 100,
                         "socketed.tooltip.default.witherskull.desc"
                 )),
@@ -448,7 +449,7 @@ public abstract class DefaultJsonConfig {
                 Collections.singletonList(new PotionGemEffect(
                         SocketedSlotTypes.BODY,
                         new AttackedActivator(new HealthPercentCondition(0.5F, ComparingCondition.ConditionComparisonType.LESS_EQUAL, true), false, AttackActivator.EventType.HURT),
-                        SELFAOE_NEAR,
+                        OTHER_AND_SELFAOE_NEAR,
                         MobEffects.POISON.getRegistryName().toString(), 0, 100,
                         "socketed.tooltip.default.pufferfish.desc"
                 )),
@@ -458,7 +459,7 @@ public abstract class DefaultJsonConfig {
                 Collections.singletonList(new PotionGemEffect(
                         SocketedSlotTypes.BODY,
                         new AttackedActivator(new HealthPercentCondition(0.5F, ComparingCondition.ConditionComparisonType.LESS_EQUAL, true), false, AttackActivator.EventType.HURT),
-                        SELFAOE_NEAR,
+                        OTHER_AND_SELFAOE_NEAR,
                         MobEffects.BLINDNESS.getRegistryName().toString(), 0, 100,
                         "socketed.tooltip.default.sealantern.desc"
                 )),
