@@ -96,6 +96,7 @@ socketed.tooltip.effect.randomteleport=Random Teleport %d
 socketed.tooltip.effect.lightning=Lightning %s
 socketed.tooltip.effect.launch=Launch
 socketed.tooltip.effect.bonusdrops=+%d Bonus Drops
+socketed.tooltip.effect.damage=Deal %s Damage
 
 socketed.tooltip.effect.plusenchantment=+%d %s
 
