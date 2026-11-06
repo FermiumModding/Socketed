@@ -336,11 +336,8 @@ socketed.tooltip.default.skulldragon.desc=Strength I and Resistance I in the End
 
 # Combination
 
-socketed.tooltip.default.combination0=Common gaming
-socketed.tooltip.default.combination0.desc=Poison! Weakness! Slowness! Speed!
-
-socketed.tooltip.default.combination2=Rare gaming
-socketed.tooltip.default.combination2.desc=Poison! Wither! Blindness!
+socketed.tooltip.default.toxic=Toxic
+socketed.tooltip.default.toxic.desc=Poison! Wither! Blindness!
 
 socketed.tooltip.default.ender=Ender
 socketed.tooltip.default.ender.desc=Getting hit on very low health has chance to negate it and teleport you far away

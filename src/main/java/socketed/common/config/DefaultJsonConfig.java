@@ -825,40 +825,7 @@ public abstract class DefaultJsonConfig {
 
         //Combinations
 
-        registerDefaultGemCombinationType("combination0", new GemCombinationType("socketed.tooltip.default.combination0", TextFormatting.DARK_GREEN,
-            false, false, false, true,
-            Arrays.asList("poison_potato", "spider_eye", "slimeball", "sugar"),
-            Collections.singletonList(new MultiEffectGemEffect(
-                SocketedSlotTypes.ALL,
-                new AttackedActivator(null, false, AttackActivator.EventType.HURT),
-                ONLYSELF,
-                Arrays.asList(
-                    new PotionGemEffect(
-                        SocketedSlotTypes.ALL, MULTIACT, SELFAOE_NEAR,
-                        MobEffects.POISON.getRegistryName().toString(), 0, 40,
-                            ""
-                    ),
-                    new PotionGemEffect(
-                        SocketedSlotTypes.ALL, MULTIACT, SELFAOE_NEAR,
-                        MobEffects.WEAKNESS.getRegistryName().toString(), 0, 40,
-                            ""
-                    ),
-                    new PotionGemEffect(
-                        SocketedSlotTypes.ALL, MULTIACT,SELFAOE_NEAR,
-                        MobEffects.SLOWNESS.getRegistryName().toString(), 0, 40,
-                            ""
-                    ),
-                    new PotionGemEffect(
-                        SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
-                        MobEffects.SPEED.getRegistryName().toString(), 0, 40,
-                            ""
-                    )
-                ),
-                    "socketed.tooltip.default.combination0.desc"
-            ))
-        ));
-
-        registerDefaultGemCombinationType("combination2", new GemCombinationType("socketed.tooltip.default.combination2", TextFormatting.GREEN,
+        registerDefaultGemCombinationType("toxic", new GemCombinationType("socketed.tooltip.default.toxic", TextFormatting.GREEN,
             false, false, false, true,
             Arrays.asList("sealantern", "witherskull", "pufferfish"),
             Collections.singletonList(new MultiEffectGemEffect(
@@ -882,7 +849,7 @@ public abstract class DefaultJsonConfig {
                             ""
                     )
                 ),
-                    "socketed.tooltip.default.combination2.desc"
+                    "socketed.tooltip.default.toxic.desc"
             ))
         ));
 
