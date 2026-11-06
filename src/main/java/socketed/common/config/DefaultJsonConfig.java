@@ -880,7 +880,7 @@ public abstract class DefaultJsonConfig {
             ))
         ));
 
-        registerDefaultGemCombinationType("bouncy", new GemCombinationType("socketed.tooltip.default.bouncy", TextFormatting.GREEN,
+        registerDefaultGemCombinationType("springloaded", new GemCombinationType("socketed.tooltip.default.springloaded", TextFormatting.GREEN,
             false, false, false, false,
             Arrays.asList("slime_block", "firework"),
             Collections.singletonList(new LaunchGemEffect(
@@ -888,7 +888,7 @@ public abstract class DefaultJsonConfig {
                 new JumpActivator(new EntityStateCondition(EntityStateCondition.EntityState.SNEAKING, true)),
                 ONLYSELF,
                 0.8F,
-                "socketed.tooltip.default.bouncy.desc"
+                "socketed.tooltip.default.springloaded.desc"
             ))
         ));
 

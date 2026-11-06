@@ -342,8 +342,8 @@ socketed.tooltip.default.toxic.desc=Poison! Wither! Blindness!
 socketed.tooltip.default.ender=Ender
 socketed.tooltip.default.ender.desc=Getting hit on very low health has chance to negate it and teleport you far away
 
-socketed.tooltip.default.bouncy=Bouncy
-socketed.tooltip.default.bouncy.desc=Sneak jumping launches you high
+socketed.tooltip.default.springloaded=Spring Loaded
+socketed.tooltip.default.springloaded.desc=Sneak jumping launches you high
 
 socketed.tooltip.default.tidal=Tidal
 socketed.tooltip.default.tidal.desc=Haste I and Night Vision while in water
