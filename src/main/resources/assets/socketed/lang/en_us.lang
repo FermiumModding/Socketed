@@ -108,6 +108,7 @@ socketed.tooltip.activator.targeted=Targeted
 socketed.tooltip.activator.kill=Kill
 socketed.tooltip.activator.rangedshot=Ranged Shot
 socketed.tooltip.activator.blockbreak=Block Break
+socketed.tooltip.activator.blocking=Blocking
 socketed.tooltip.activator.fall=Falling %s+ Blocks
 socketed.tooltip.activator.jump=Jump
 

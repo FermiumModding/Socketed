@@ -1,6 +1,8 @@
 package socketed.mixin.vanilla;
 
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -13,6 +15,7 @@ import socketed.api.common.capabilities.effectscache.CapabilityEffectsCacheHandl
 import socketed.api.common.capabilities.effectscache.ICapabilityEffectsCache;
 import socketed.api.socket.gem.effect.GenericGemEffect;
 import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
+import socketed.common.socket.gem.effect.activatable.activator.BlockingActivator;
 import socketed.common.socket.gem.effect.activatable.activator.DeathTotemCheckActivator;
 import socketed.api.socket.gem.effect.activatable.callback.CancelEventCallback;
 
@@ -27,6 +30,17 @@ public abstract class EntityLivingBaseMixin extends Entity {
 		super(worldIn);
 	}
 	
+	@ModifyExpressionValue(
+			method = "attackEntityFrom",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/EntityLivingBase;canBlockDamageSource(Lnet/minecraft/util/DamageSource;)Z")
+	)
+	private boolean socketed_vanillaEntityLivingBase_attackEntityFrom_canBlockDamageSource(boolean original, @Local(argsOnly = true) DamageSource source) {
+		if(original && ((EntityLivingBase)(Object)this) instanceof EntityPlayer) {
+			return BlockingActivator.onShieldBlock((EntityPlayer)(Object)this, source);
+		}
+		return original;
+	}
+
 	@ModifyReturnValue(
 			method = "checkTotemDeathProtection",
 			at = @At("RETURN")
