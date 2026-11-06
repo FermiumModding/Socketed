@@ -41,7 +41,7 @@ public abstract class EntityLivingBaseMixin extends Entity {
 					ActivatableGemEffect activatableGemEffect = (ActivatableGemEffect)effect;
 					if(activatableGemEffect.getActivator() instanceof DeathTotemCheckActivator) {
 						DeathTotemCheckActivator activator = (DeathTotemCheckActivator)activatableGemEffect.getActivator();
-						CancelEventCallback callable = new CancelEventCallback(false);
+						CancelEventCallback callable = new CancelEventCallback(false, source);
 						activator.attemptDeathTotemCheckActivation(activatableGemEffect, callable, ((EntityPlayer)(Object)this));
 						
 						if(callable.isCancelled()) {

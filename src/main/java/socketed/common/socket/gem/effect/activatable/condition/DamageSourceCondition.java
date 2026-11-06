@@ -10,6 +10,7 @@ import net.minecraftforge.event.entity.living.LivingDamageEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.common.eventhandler.Event;
 import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
+import socketed.api.socket.gem.effect.activatable.callback.CancelEventCallback;
 import socketed.api.socket.gem.effect.activatable.callback.GenericEventCallback;
 import socketed.api.socket.gem.effect.activatable.callback.IEffectCallback;
 
@@ -34,10 +35,11 @@ public class DamageSourceCondition extends GenericCondition {
 	
 	@Override
 	public boolean testCondition(@Nullable IEffectCallback callback, EntityPlayer playerSource, EntityLivingBase effectTarget) {
-		if(!(callback instanceof GenericEventCallback)) return false;
 		try {
-			Event event = ((GenericEventCallback<?>)callback).getEvent();
-			DamageSource source = getSource(event);
+			DamageSource source;
+			if(callback instanceof GenericEventCallback) source = getSource(((GenericEventCallback<?>)callback).getEvent());
+			else if(callback instanceof CancelEventCallback) source = ((CancelEventCallback)callback).getSource();
+			else return false;
 			if(source == null) return false;
 			
 			if(this.requireMelee && (!isDamageSourceMelee(source) || source.isExplosion())) return false;
