@@ -132,6 +132,7 @@ public class JsonConfig {
         SocketedUtil.registerCondition(AttackCooldownCondition.TYPE_NAME, AttackCooldownCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(IsMountedCondition.TYPE_NAME, IsMountedCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(CreatureAttributeCondition.TYPE_NAME, CreatureAttributeCondition.class, Socketed.MODID);
+        SocketedUtil.registerCondition(WeatherCondition.TYPE_NAME, WeatherCondition.class, Socketed.MODID);
         
         SocketedUtil.registerSlotTypes(SocketedSlotTypes.class, Socketed.MODID);
         
