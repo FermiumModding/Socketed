@@ -111,6 +111,7 @@ public class JsonConfig {
         SocketedUtil.registerActivator(TargetedActivator.TYPE_NAME, TargetedActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(KillActivator.TYPE_NAME, KillActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(RangedShotActivator.TYPE_NAME, RangedShotActivator.class, Socketed.MODID);
+        SocketedUtil.registerActivator(BlockBreakActivator.TYPE_NAME, BlockBreakActivator.class, Socketed.MODID);
         
         SocketedUtil.registerTarget(SelfTarget.TYPE_NAME, SelfTarget.class, Socketed.MODID);
         SocketedUtil.registerTarget(OtherTarget.TYPE_NAME, OtherTarget.class, Socketed.MODID);
@@ -136,6 +137,7 @@ public class JsonConfig {
         SocketedUtil.registerCondition(IsMountedCondition.TYPE_NAME, IsMountedCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(CreatureAttributeCondition.TYPE_NAME, CreatureAttributeCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(WeatherCondition.TYPE_NAME, WeatherCondition.class, Socketed.MODID);
+        SocketedUtil.registerCondition(BlockCondition.TYPE_NAME, BlockCondition.class, Socketed.MODID);
         
         SocketedUtil.registerSlotTypes(SocketedSlotTypes.class, Socketed.MODID);
         
