@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IDI",
+    "SSS",
+    "L L"
+  ],
+  "key": {
+    "I": { "type": "forge:ore_dict", "ore": "ingotIron" },
+    "D": { "type": "forge:ore_dict", "ore": "gemDiamond" },
+    "S": { "type": "forge:ore_dict", "ore": "stone" },
+    "L": { "type": "forge:ore_dict", "ore": "logWood" }
+  },
+  "result": { "item": "socketed:socket_bench" }
+}
