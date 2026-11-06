@@ -116,6 +116,55 @@ public abstract class DefaultJsonConfig {
                 )),
                 Collections.singletonList(new OreFilter("gunpowder"))));
 
+        registerDefaultGemType("feather", new GemType("socketed.tooltip.default.feather", 0, TextFormatting.WHITE,
+                Collections.singletonList(new CancelEventGemEffect(
+                        SocketedSlotTypes.FEET,
+                        new FallActivator(new ChanceCondition(0.5F), 4.0F),
+                        ONLYSELF,
+                        "socketed.tooltip.default.feather.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:feather", 0, false))));
+
+        registerDefaultGemType("snowball", new GemType("socketed.tooltip.default.snowball", 0, TextFormatting.AQUA,
+                Collections.singletonList(new PotionGemEffect(
+                        SocketedSlotTypes.HAND,
+                        new AttackingActivator(new ChanceCondition(0.25F), true, AttackActivator.EventType.HURT),
+                        ONLYOTHER,
+                        MobEffects.SLOWNESS.getRegistryName().toString(), 0, 40,
+                        "socketed.tooltip.default.snowball.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:snowball", 0, false))));
+
+        registerDefaultGemType("ink_sac", new GemType("socketed.tooltip.default.ink_sac", 0, TextFormatting.DARK_BLUE,
+                Collections.singletonList(new PotionGemEffect(
+                        SocketedSlotTypes.CHEST,
+                        new AttackedActivator(new ChanceCondition(0.2F), false, AttackActivator.EventType.HURT),
+                        ONLYOTHER,
+                        MobEffects.BLINDNESS.getRegistryName().toString(), 0, 60,
+                        "socketed.tooltip.default.ink_sac.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:dye", 0, true))));
+
+        registerDefaultGemType("leather", new GemType("socketed.tooltip.default.leather", 0, TextFormatting.GOLD,
+                Collections.singletonList(new ExtraIFrameGemEffect(
+                        SocketedSlotTypes.BODY,
+                        new AttackedActivator(new ChanceCondition(0.1F), false, AttackActivator.EventType.HURT),
+                        ONLYSELF,
+                        5,
+                        "socketed.tooltip.default.leather.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:leather", 0, false))));
+
+        registerDefaultGemType("cactus", new GemType("socketed.tooltip.default.cactus", 0, TextFormatting.DARK_GREEN,
+                Collections.singletonList(new DamageGemEffect(
+                        SocketedSlotTypes.CHEST,
+                        new AttackedActivator(new DamageSourceCondition(true, false, ""), false, AttackActivator.EventType.HURT),
+                        ONLYOTHER,
+                        1.0F, "thorns", false, false,
+                        "socketed.tooltip.default.cactus.desc"
+                )),
+                Collections.singletonList(new ItemFilter("minecraft:cactus", 0, false))));
+
         //Tier 1
 
         registerDefaultGemType("blazerod", new GemType("socketed.tooltip.default.blazerod", 1, TextFormatting.DARK_RED,

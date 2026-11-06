@@ -152,6 +152,21 @@ socketed.tooltip.default.coal.desc=Attack has chance to set on fire
 socketed.tooltip.default.gunpowder=Explosion!
 socketed.tooltip.default.gunpowder.desc=Attack has chance to explode
 
+socketed.tooltip.default.feather=Light as a feather
+socketed.tooltip.default.feather.desc=Chance to negate fall damage
+
+socketed.tooltip.default.snowball=Chilly
+socketed.tooltip.default.snowball.desc=Attack has chance to inflict Slowness I
+
+socketed.tooltip.default.ink_sac=Ink cloud
+socketed.tooltip.default.ink_sac.desc=Getting hit has chance to blind the attacker
+
+socketed.tooltip.default.leather=Thick hide
+socketed.tooltip.default.leather.desc=Getting hit has chance to extend invulnerability
+
+socketed.tooltip.default.cactus=Prickly
+socketed.tooltip.default.cactus.desc=Melee attackers take thorns damage
+
 # Tier 1
 
 socketed.tooltip.default.blazerod=Ignite
