@@ -106,6 +106,7 @@ socketed.tooltip.activator.deathtotemcheck=Death Totem Check
 socketed.tooltip.activator.passive=Every %d Ticks
 socketed.tooltip.activator.targeted=Targeted
 socketed.tooltip.activator.kill=Kill
+socketed.tooltip.activator.rangedshot=Ranged Shot
 
 socketed.tooltip.target.otheraoe=Other AOE
 socketed.tooltip.target.other=Other
