@@ -106,6 +106,7 @@ public class JsonConfig {
         SocketedUtil.registerEffectType(DisableShieldGemEffect.TYPE_NAME, DisableShieldGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(RandomTeleportGemEffect.TYPE_NAME, RandomTeleportGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(LightningGemEffect.TYPE_NAME, LightningGemEffect.class, Socketed.MODID);
+        SocketedUtil.registerEffectType(LaunchGemEffect.TYPE_NAME, LaunchGemEffect.class, Socketed.MODID);
         
         SocketedUtil.registerActivator(PassiveActivator.TYPE_NAME, PassiveActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(AttackingActivator.TYPE_NAME, AttackingActivator.class, Socketed.MODID);

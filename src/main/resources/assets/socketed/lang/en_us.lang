@@ -94,6 +94,7 @@ socketed.tooltip.effect.cleanse.potion=Cleanse %s
 socketed.tooltip.effect.disableshield=Disable Shield %ss
 socketed.tooltip.effect.randomteleport=Random Teleport %d
 socketed.tooltip.effect.lightning=Lightning %s
+socketed.tooltip.effect.launch=Launch
 
 socketed.tooltip.effect.plusenchantment=+%d %s
 
