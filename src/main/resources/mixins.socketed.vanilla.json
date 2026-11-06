@@ -12,6 +12,8 @@
     "EntityLivingMixin",
     "EntityVillagerListEnchantedItemMixin",
     "EntityVillagerListItemMixin",
+    "IEntityLivingBaseMixin",
+    "IEntityLivingMixin",
     "ItemMixin",
     "ItemStackMixin",
     "LootEntryItemMixin",
