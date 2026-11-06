@@ -885,5 +885,119 @@ public abstract class DefaultJsonConfig {
                     "socketed.tooltip.default.combination2.desc"
             ))
         ));
+
+        registerDefaultGemCombinationType("ender", new GemCombinationType("socketed.tooltip.default.ender", TextFormatting.DARK_AQUA,
+            false, false, false, false,
+            Arrays.asList("ender_pearl", "chorus_fruit"),
+            Collections.singletonList(new MultiEffectGemEffect(
+                SocketedSlotTypes.CHEST,
+                new AttackedActivator(new MultiCondition(MultiCondition.ConditionLogicType.AND, Arrays.asList(
+                        new HealthPercentCondition(0.25F, ComparingCondition.ConditionComparisonType.LESS_EQUAL, true),
+                        new ChanceCondition(0.35F))),
+                        false, AttackActivator.EventType.HURT),
+                ONLYSELF,
+                Arrays.asList(
+                    new CancelEventGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
+                        ""
+                    ),
+                    new RandomTeleportGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
+                        24,
+                        ""
+                    ),
+                    new ExtraIFrameGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
+                        20,
+                        ""
+                    )
+                ),
+                "socketed.tooltip.default.ender.desc"
+            ))
+        ));
+
+        registerDefaultGemCombinationType("bouncy", new GemCombinationType("socketed.tooltip.default.bouncy", TextFormatting.GREEN,
+            false, false, false, false,
+            Arrays.asList("slime_block", "firework"),
+            Collections.singletonList(new LaunchGemEffect(
+                SocketedSlotTypes.FEET,
+                new JumpActivator(new EntityStateCondition(EntityStateCondition.EntityState.SNEAKING, true)),
+                ONLYSELF,
+                0.8F,
+                "socketed.tooltip.default.bouncy.desc"
+            ))
+        ));
+
+        registerDefaultGemCombinationType("tidal", new GemCombinationType("socketed.tooltip.default.tidal", TextFormatting.AQUA,
+            false, false, false, false,
+            Arrays.asList("prismarine_crystals", "sponge"),
+            Collections.singletonList(new MultiEffectGemEffect(
+                SocketedSlotTypes.HEAD,
+                new PassiveActivator(new EntityStateCondition(EntityStateCondition.EntityState.IN_WATER, true), 39),
+                ONLYSELF,
+                Arrays.asList(
+                    new PotionGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
+                        MobEffects.HASTE.getRegistryName().toString(), 0, 40,
+                        ""
+                    ),
+                    new PotionGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
+                        MobEffects.NIGHT_VISION.getRegistryName().toString(), 0, 300,
+                        ""
+                    )
+                ),
+                "socketed.tooltip.default.tidal.desc"
+            ))
+        ));
+
+        registerDefaultGemCombinationType("draconic", new GemCombinationType("socketed.tooltip.default.draconic", TextFormatting.DARK_PURPLE,
+            false, false, false, false,
+            Arrays.asList("skulldragon", "dragon_breath"),
+            Arrays.asList(
+                new PotionGemEffect(
+                    SocketedSlotTypes.HEAD,
+                    new PassiveActivator(new DimensionCondition(1, null), 39),
+                    ONLYSELF,
+                    MobEffects.REGENERATION.getRegistryName().toString(), 0, 50,
+                    "socketed.tooltip.default.draconic.desc.1"
+                ),
+                new DamageGemEffect(
+                    SocketedSlotTypes.HEAD,
+                    new AttackedActivator(new DimensionCondition(1, null), false, AttackActivator.EventType.HURT),
+                    ONLYOTHER,
+                    2.0F, "magic", true, false,
+                    "socketed.tooltip.default.draconic.desc.2"
+                )
+            )
+        ));
+
+        registerDefaultGemCombinationType("alchemist", new GemCombinationType("socketed.tooltip.default.alchemist", TextFormatting.LIGHT_PURPLE,
+            false, false, false, false,
+            Arrays.asList("glistering_melon", "magma_cream", "milk_bucket"),
+            Collections.singletonList(new MultiEffectGemEffect(
+                SocketedSlotTypes.BODY,
+                new KillActivator(null),
+                ONLYSELF,
+                Arrays.asList(
+                    new HealGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
+                        4.0F, 0.0F,
+                        ""
+                    ),
+                    new CleanseGemEffect(SocketedSlotTypes.ALL, MULTIACT, ONLYSELF,
+                        CleanseGemEffect.CleanseType.HARMFUL, null,
+                        ""
+                    )
+                ),
+                "socketed.tooltip.default.alchemist.desc"
+            ))
+        ));
+
+        registerDefaultGemCombinationType("fortress", new GemCombinationType("socketed.tooltip.default.fortress", TextFormatting.DARK_RED,
+            false, false, false, false,
+            Arrays.asList("nether_brick", "magma_cream"),
+            Collections.singletonList(new PotionGemEffect(
+                SocketedSlotTypes.BODY,
+                new PassiveActivator(new DimensionCondition(-1, null), 39),
+                ONLYSELF,
+                MobEffects.FIRE_RESISTANCE.getRegistryName().toString(), 0, 40,
+                "socketed.tooltip.default.fortress.desc"
+            ))
+        ));
     }
 }

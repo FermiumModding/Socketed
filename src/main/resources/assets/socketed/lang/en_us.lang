@@ -341,3 +341,22 @@ socketed.tooltip.default.combination0.desc=Poison! Weakness! Slowness! Speed!
 
 socketed.tooltip.default.combination2=Rare gaming
 socketed.tooltip.default.combination2.desc=Poison! Wither! Blindness!
+
+socketed.tooltip.default.ender=Ender
+socketed.tooltip.default.ender.desc=Getting hit on very low health has chance to negate it and teleport you far away
+
+socketed.tooltip.default.bouncy=Bouncy
+socketed.tooltip.default.bouncy.desc=Sneak jumping launches you high
+
+socketed.tooltip.default.tidal=Tidal
+socketed.tooltip.default.tidal.desc=Haste I and Night Vision while in water
+
+socketed.tooltip.default.draconic=Draconic
+socketed.tooltip.default.draconic.desc.1=Regeneration I in the End
+socketed.tooltip.default.draconic.desc.2=Attackers in the End take magic damage
+
+socketed.tooltip.default.alchemist=Alchemist
+socketed.tooltip.default.alchemist.desc=Kills heal and cleanse harmful effects
+
+socketed.tooltip.default.fortress=Fortress
+socketed.tooltip.default.fortress.desc=Fire Resistance in the Nether
