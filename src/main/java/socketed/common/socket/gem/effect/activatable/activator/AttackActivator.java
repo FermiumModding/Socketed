@@ -49,6 +49,10 @@ public abstract class AttackActivator extends GenericActivator {
 		this.eventType = eventType;
 	}
 
+	public EventType getEventType() {
+		return this.eventType;
+	}
+
 	/**
 	 * DirectlyActivated: Optional, default false
 	 * Event Type: Optional, default HURT
