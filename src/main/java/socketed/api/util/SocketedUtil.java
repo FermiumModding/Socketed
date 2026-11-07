@@ -1,8 +1,18 @@
 package socketed.api.util;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSource;
+import net.minecraftforge.event.entity.player.AttackEntityEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import org.apache.logging.log4j.Level;
 import socketed.Socketed;
 import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
@@ -22,6 +32,8 @@ import socketed.api.socket.gem.filter.GenericFilter;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -211,5 +223,75 @@ public abstract class SocketedUtil {
                 .filter(effect -> effectType.isAssignableFrom(effect.getClass()))
                 //cast the resulting list to that effect type
                 .map(effectType::cast);
+    }
+
+    /**
+     * @return if the DamageSource is a melee attack, the immediate source being a living entity, excluding thorns
+     */
+    public static boolean isDamageSourceMelee(DamageSource source) {
+        if(source instanceof EntityDamageSource && ((EntityDamageSource)source).getIsThornsDamage()) return false;
+        return source.getImmediateSource() instanceof EntityLivingBase;
+    }
+
+    /**
+     * @return if the DamageSource is a ranged attack, the true source being a living entity but not the immediate source
+     */
+    public static boolean isDamageSourceRanged(DamageSource source) {
+        return !(source.getImmediateSource() instanceof EntityLivingBase) && source.getTrueSource() instanceof EntityLivingBase;
+    }
+
+    /**
+     * @return an ItemStack representing the given block state, or ItemStack.EMPTY if the block has no item form
+     */
+    public static ItemStack getStackForBlock(IBlockState state) {
+        Block block = state.getBlock();
+        Item item = Item.getItemFromBlock(block);
+        if(item == Items.AIR) return ItemStack.EMPTY;
+        int meta = item.getHasSubtypes() ? block.damageDropped(state) : 0;
+        return new ItemStack(item, 1, meta);
+    }
+
+    //
+    // Attack Strength
+    //
+
+    private static final Map<EntityPlayer, RecordedStrength> recordedStrengths = new WeakHashMap<>();
+
+    /**
+     * Attack strength is recorded on attack, as the player's cooldown is reset before most damage events fire
+     * @return the player's attack strength recorded this tick, or their current cooled attack strength if none was recorded
+     */
+    public static float getAttackStrength(EntityPlayer player) {
+        RecordedStrength recorded = recordedStrengths.get(player);
+        if(recorded != null && recorded.tick == player.ticksExisted) return recorded.strength;
+        return player.getCooledAttackStrength(0.5F);
+    }
+
+    /**
+     * Records the player's attack strength for the current tick, used for compat with mods that handle attacks differently such as RLCombat
+     */
+    public static void recordAttackStrength(EntityPlayer player, float strength) {
+        recordedStrengths.put(player, new RecordedStrength(strength, player.ticksExisted));
+    }
+
+    private static class RecordedStrength {
+        private final float strength;
+        private final int tick;
+
+        private RecordedStrength(float strength, int tick) {
+            this.strength = strength;
+            this.tick = tick;
+        }
+    }
+
+    @Mod.EventBusSubscriber
+    public static class EventHandler {
+
+        @SubscribeEvent
+        public static void onAttackEntity(AttackEntityEvent event) {
+            EntityPlayer player = event.getEntityPlayer();
+            if(player == null || player.world.isRemote) return;
+            recordAttackStrength(player, player.getCooledAttackStrength(0.5F));
+        }
     }
 }

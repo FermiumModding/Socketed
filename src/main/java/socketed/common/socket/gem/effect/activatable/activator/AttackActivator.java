@@ -21,7 +21,7 @@ import socketed.api.common.capabilities.socketable.ICapabilitySocketable;
 import socketed.api.socket.gem.effect.GenericGemEffect;
 import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
 import socketed.api.socket.gem.effect.activatable.callback.GenericEventCallback;
-import socketed.common.socket.gem.effect.activatable.condition.DamageSourceCondition;
+import socketed.api.util.SocketedUtil;
 import socketed.api.socket.gem.effect.activatable.condition.GenericCondition;
 import socketed.api.socket.gem.effect.slot.ISlotType;
 import socketed.api.socket.gem.effect.slot.SocketedSlotTypes;
@@ -113,8 +113,8 @@ public abstract class AttackActivator extends GenericActivator {
 			if(source == null) return;
 			
 			//Prioritize checking the direct attacker, prevent ranged pet attacks from triggering attacker effects such as lycanites
-			boolean isMelee = DamageSourceCondition.isDamageSourceMelee(source);
-			boolean isRanged = !isMelee && DamageSourceCondition.isDamageSourceRanged(source);
+			boolean isMelee = SocketedUtil.isDamageSourceMelee(source);
+			boolean isRanged = !isMelee && SocketedUtil.isDamageSourceRanged(source);
 			
 			EntityLivingBase target = event.getEntityLiving();
 			EntityLivingBase attacker;

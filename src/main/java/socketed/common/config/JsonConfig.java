@@ -17,7 +17,6 @@ import socketed.api.socket.gem.GemType;
 import socketed.common.socket.gem.effect.AttributeGemEffect;
 import socketed.common.socket.gem.effect.EffectDeserializer;
 import socketed.api.socket.gem.effect.GenericGemEffect;
-import socketed.common.socket.gem.effect.PlusEnchantmentGemEffect;
 import socketed.common.socket.gem.effect.activatable.*;
 import socketed.common.socket.gem.effect.activatable.activator.*;
 import socketed.common.socket.gem.effect.activatable.condition.*;
@@ -88,41 +87,14 @@ public class JsonConfig {
         SocketedUtil.registerFilterType(OreFilter.TYPE_NAME, OreFilter.class, Socketed.MODID);
         
         SocketedUtil.registerEffectType(AttributeGemEffect.TYPE_NAME, AttributeGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(PotionGemEffect.TYPE_NAME, PotionGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(IgniteGemEffect.TYPE_NAME, IgniteGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(KnockbackGemEffect.TYPE_NAME, KnockbackGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(UndyingTotemGemEffect.TYPE_NAME, UndyingTotemGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(CancelEventGemEffect.TYPE_NAME, CancelEventGemEffect.class, Socketed.MODID);
         SocketedUtil.registerEffectType(MultiEffectGemEffect.TYPE_NAME, MultiEffectGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(ExtraIFrameGemEffect.TYPE_NAME, ExtraIFrameGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(BypassIFrameGemEffect.TYPE_NAME, BypassIFrameGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(ExplosionGemEffect.TYPE_NAME, ExplosionGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(LoseTargetGemEffect.TYPE_NAME, LoseTargetGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(PlusEnchantmentGemEffect.TYPE_NAME, PlusEnchantmentGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(ExecuteCommandGemEffect.TYPE_NAME, ExecuteCommandGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(DamageModifierGemEffect.TYPE_NAME, DamageModifierGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(HealGemEffect.TYPE_NAME, HealGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(CleanseGemEffect.TYPE_NAME, CleanseGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(DisableShieldGemEffect.TYPE_NAME, DisableShieldGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(RandomTeleportGemEffect.TYPE_NAME, RandomTeleportGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(LightningGemEffect.TYPE_NAME, LightningGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(LaunchGemEffect.TYPE_NAME, LaunchGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(BonusDropsGemEffect.TYPE_NAME, BonusDropsGemEffect.class, Socketed.MODID);
-        SocketedUtil.registerEffectType(DamageGemEffect.TYPE_NAME, DamageGemEffect.class, Socketed.MODID);
         
         SocketedUtil.registerActivator(PassiveActivator.TYPE_NAME, PassiveActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(AttackingActivator.TYPE_NAME, AttackingActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(AttackedActivator.TYPE_NAME, AttackedActivator.class, Socketed.MODID);
-        SocketedUtil.registerActivator(DeathTotemCheckActivator.TYPE_NAME, DeathTotemCheckActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(MultiEffectActivator.TYPE_NAME, MultiEffectActivator.class, Socketed.MODID);
-        SocketedUtil.registerActivator(TargetedActivator.TYPE_NAME, TargetedActivator.class, Socketed.MODID);
         SocketedUtil.registerActivator(KillActivator.TYPE_NAME, KillActivator.class, Socketed.MODID);
-        SocketedUtil.registerActivator(RangedShotActivator.TYPE_NAME, RangedShotActivator.class, Socketed.MODID);
-        SocketedUtil.registerActivator(BlockBreakActivator.TYPE_NAME, BlockBreakActivator.class, Socketed.MODID);
-        SocketedUtil.registerActivator(BlockingActivator.TYPE_NAME, BlockingActivator.class, Socketed.MODID);
-        SocketedUtil.registerActivator(FallActivator.TYPE_NAME, FallActivator.class, Socketed.MODID);
-        SocketedUtil.registerActivator(JumpActivator.TYPE_NAME, JumpActivator.class, Socketed.MODID);
-        SocketedUtil.registerActivator(EnvironmentalDamageActivator.TYPE_NAME, EnvironmentalDamageActivator.class, Socketed.MODID);
         
         SocketedUtil.registerTarget(SelfTarget.TYPE_NAME, SelfTarget.class, Socketed.MODID);
         SocketedUtil.registerTarget(OtherTarget.TYPE_NAME, OtherTarget.class, Socketed.MODID);
@@ -131,32 +103,12 @@ public class JsonConfig {
         
         SocketedUtil.registerCondition(MultiCondition.TYPE_NAME, MultiCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(ChanceCondition.TYPE_NAME, ChanceCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(PotionActiveCondition.TYPE_NAME, PotionActiveCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(HealthPercentCondition.TYPE_NAME, HealthPercentCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(ElevationCondition.TYPE_NAME, ElevationCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(LightLevelCondition.TYPE_NAME, LightLevelCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(IsBossCondition.TYPE_NAME, IsBossCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(BiomeCondition.TYPE_NAME, BiomeCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(BiomeTypeCondition.TYPE_NAME, BiomeTypeCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(DamageSourceCondition.TYPE_NAME, DamageSourceCondition.class, Socketed.MODID);
         SocketedUtil.registerCondition(InvertedCondition.TYPE_NAME, InvertedCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(IsSpecificEntityCondition.TYPE_NAME, IsSpecificEntityCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(DistanceCondition.TYPE_NAME, DistanceCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(AttackCooldownCondition.TYPE_NAME, AttackCooldownCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(CreatureAttributeCondition.TYPE_NAME, CreatureAttributeCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(WeatherCondition.TYPE_NAME, WeatherCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(BlockCondition.TYPE_NAME, BlockCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(EntityStateCondition.TYPE_NAME, EntityStateCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(TimeOfDayCondition.TYPE_NAME, TimeOfDayCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(MoonPhaseCondition.TYPE_NAME, MoonPhaseCondition.class, Socketed.MODID);
-        SocketedUtil.registerCondition(DimensionCondition.TYPE_NAME, DimensionCondition.class, Socketed.MODID);
         
         SocketedUtil.registerSlotTypes(SocketedSlotTypes.class, Socketed.MODID);
         
         SocketedUtil.registerSocket(GenericSocket.TYPE_NAME, GenericSocket::new, Socketed.MODID);
         SocketedUtil.registerSocket(TieredSocket.TYPE_NAME, TieredSocket::new, Socketed.MODID);
-        
-        DefaultJsonConfig.initializeBuiltinEntries();
     }
 
     public static void postInit() {

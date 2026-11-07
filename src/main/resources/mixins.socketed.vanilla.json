@@ -7,13 +7,9 @@
   "minVersion": "0.8",
   "mixins": [
     "ContainerRepairMixin",
-    "EnchantmentHelperMixin",
-    "EntityLivingBaseMixin",
     "EntityLivingMixin",
     "EntityVillagerListEnchantedItemMixin",
     "EntityVillagerListItemMixin",
-    "IEntityLivingBaseMixin",
-    "IEntityLivingMixin",
     "ItemMixin",
     "ItemStackMixin",
     "LootEntryItemMixin",

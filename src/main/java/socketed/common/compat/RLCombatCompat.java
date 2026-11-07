@@ -4,7 +4,7 @@ import bettercombat.mod.event.RLCombatModifyDamageEvent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import socketed.common.socket.gem.effect.activatable.condition.AttackCooldownCondition;
+import socketed.api.util.SocketedUtil;
 
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -23,7 +23,7 @@ public class RLCombatCompat {
     public static void onRLCombatModifyDamagePre(RLCombatModifyDamageEvent.Pre event) {
         EntityPlayer player = event.getEntityPlayer();
         if(player == null || player.world.isRemote) return;
-        AttackCooldownCondition.recordStrength(player, event.getCooledStrength());
+        SocketedUtil.recordAttackStrength(player, event.getCooledStrength());
         recordedHands.put(player, new RecordedHand(event.getOffhand(), player.ticksExisted));
     }
 

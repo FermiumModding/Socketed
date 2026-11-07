@@ -16,7 +16,7 @@ import socketed.api.socket.gem.effect.activatable.callback.GenericEventCallback;
 import socketed.api.socket.gem.effect.slot.SocketedSlotTypes;
 import socketed.common.socket.gem.effect.activatable.activator.AttackActivator;
 import socketed.common.socket.gem.effect.activatable.activator.AttackedActivator;
-import socketed.common.socket.gem.effect.activatable.condition.DamageSourceCondition;
+import socketed.api.util.SocketedUtil;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -48,8 +48,8 @@ public class FirstAidCompat {
         if(source == null) return;
 
         //Prioritize checking the direct attacker, prevent ranged pet attacks from triggering attacker effects such as lycanites
-        boolean isMelee = DamageSourceCondition.isDamageSourceMelee(source);
-        boolean isRanged = !isMelee && DamageSourceCondition.isDamageSourceRanged(source);
+        boolean isMelee = SocketedUtil.isDamageSourceMelee(source);
+        boolean isRanged = !isMelee && SocketedUtil.isDamageSourceRanged(source);
 
         EntityLivingBase target = event.getEntityLiving();
         EntityLivingBase attacker;

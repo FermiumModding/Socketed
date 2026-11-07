@@ -13,7 +13,6 @@ import socketed.Socketed;
 import socketed.api.socket.gem.effect.GenericGemEffect;
 import socketed.api.socket.gem.effect.activatable.ActivatableGemEffect;
 import socketed.api.socket.gem.effect.activatable.activator.GenericActivator;
-import socketed.common.socket.gem.effect.activatable.activator.DeathTotemCheckActivator;
 import socketed.common.socket.gem.effect.activatable.activator.MultiEffectActivator;
 import socketed.api.socket.gem.effect.activatable.callback.IEffectCallback;
 import socketed.api.socket.gem.effect.activatable.target.GenericTarget;
@@ -126,10 +125,10 @@ public class MultiEffectGemEffect extends ActivatableGemEffect {
                         return false;
                     }
                 }
-                if(this.getActivator() instanceof DeathTotemCheckActivator &&
-                   this.effects.stream().anyMatch(effect -> effect instanceof UndyingTotemGemEffect) &&
+                if("Death Totem Check".equals(this.getActivator().getTypeName()) &&
+                   this.effects.stream().anyMatch(effect -> "Undying Totem".equals(effect.getTypeName())) &&
                    this.effects.stream().noneMatch(effect -> effect instanceof CancelEventGemEffect)) {
-                    Socketed.LOGGER.warn("Possible invalid " + this.getTypeName() + " Effect, " + UndyingTotemGemEffect.TYPE_NAME + " sub-effect does not prevent death without a " + CancelEventGemEffect.TYPE_NAME + " sub-effect");
+                    Socketed.LOGGER.warn("Possible invalid " + this.getTypeName() + " Effect, Undying Totem sub-effect does not prevent death without a " + CancelEventGemEffect.TYPE_NAME + " sub-effect");
                 }
                 return true;
             }
