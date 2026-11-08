@@ -4,6 +4,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import socketed.api.socket.GenericSocket;
 import socketed.api.socket.gem.GemCombinationInstance;
 import socketed.api.socket.gem.GemInstance;
+import socketed.api.socket.gem.GemType;
 import socketed.api.socket.gem.effect.GenericGemEffect;
 import socketed.api.socket.gem.effect.slot.ISlotType;
 
@@ -82,6 +83,15 @@ public interface ICapabilitySocketable {
      * @return true if gem was added, false if no available empty socket
      */
     boolean addGem(GemInstance gem);
+
+    /**
+     * Whether the gem type's Max Per Item cap would allow another gem of that type to be socketed on this item
+     * Gems of the same type in all sockets are counted, including disabled or overridden ones
+     * @param gemType the gem type to check
+     * @param ignoredSocketIndex socket index to exclude from the count, such as the socket being replaced, -1 to count all sockets
+     * @return true if the gem type is uncapped or the cap has not been reached
+     */
+    boolean isUnderGemTypeCap(GemType gemType, int ignoredSocketIndex);
 
     /**
      * Attempts to replace the gem in the specified socket with the provided gem.

@@ -247,7 +247,7 @@ public class ContainerSocketing extends Container {
                 //Creating a new instance isn't the best for performance but better safe than sorry for using GemType check here
                 GemInstance gem = new GemInstance(stack);
                 if(gem.validate() && gem.getGemType().hasEffectsForStack(socketable)) {
-                    return socket.acceptsGem(gem, false);
+                    return socket.acceptsGem(gem, false) && cap.isUnderGemTypeCap(gem.getGemType(), this.getSlotIndex() - 1);
                 }
             }
             return false;

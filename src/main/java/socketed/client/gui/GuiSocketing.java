@@ -224,7 +224,7 @@ public class GuiSocketing extends GuiContainer {
                 boolean disabled = socket.isDisabled();
                 boolean locked = socket.isLocked();
                 
-                if(locked || (!cursorStack.isEmpty() && !(gemType != null && socket.acceptsGemType(gemType, false) && gemType.hasEffectsForStack(socketable)))) {
+                if(locked || (!cursorStack.isEmpty() && !(gemType != null && socket.acceptsGemType(gemType, false) && gemType.hasEffectsForStack(socketable) && itemSockets.isUnderGemTypeCap(gemType, socketIndex)))) {
                     this.mc.getTextureManager().bindTexture(SLOT_INVALID_TEXTURE);
                     GuiSocketing.drawModalRectWithCustomSizedTexture(x + 1, y + 1, 0, 0, 16, 16, 16, 16);
                 }

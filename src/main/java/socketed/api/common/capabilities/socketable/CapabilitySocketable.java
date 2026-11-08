@@ -9,6 +9,7 @@ import socketed.api.socket.GenericSocket;
 import socketed.api.socket.gem.GemCombinationInstance;
 import socketed.api.socket.gem.GemCombinationType;
 import socketed.api.socket.gem.GemInstance;
+import socketed.api.socket.gem.GemType;
 import socketed.api.socket.gem.effect.GenericGemEffect;
 import socketed.api.socket.gem.effect.slot.ISlotType;
 import socketed.api.util.SocketedUtil;
@@ -155,6 +156,7 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	public boolean addGem(GemInstance gem) {
 		if(gem == null) return false;
 		if(!gem.getGemType().hasEffectsForStack(this.itemStack)) return false;
+		if(!this.isUnderGemTypeCap(gem.getGemType(), -1)) return false;
 		for(GenericSocket socket : this.sockets) {
 			if(socket.isEmpty() && socket.setGem(gem, false)) {
 				this.refreshCombinations();
@@ -165,10 +167,28 @@ public class CapabilitySocketable implements ICapabilitySocketable {
 	}
 	
 	@Override
+	public boolean isUnderGemTypeCap(GemType gemType, int ignoredSocketIndex) {
+		if(gemType == null) return false;
+		int max = gemType.getMaxPerItem();
+		if(max <= 0) return true;
+		int count = 0;
+		for(int i = 0; i < this.sockets.size(); i++) {
+			if(i == ignoredSocketIndex) continue;
+			GemInstance socketed = this.sockets.get(i).getGem();
+			if(socketed != null && socketed.getGemType() != null && gemType.getName().equals(socketed.getGemType().getName())) {
+				count++;
+				if(count >= max) return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
 	public boolean replaceGemAt(GemInstance gem, int socketIndex) {
 		if(socketIndex < 0 || socketIndex >= this.sockets.size()) return false;
 		if(gem == null) return false;
 		if(!gem.getGemType().hasEffectsForStack(this.itemStack)) return false;
+		if(!this.isUnderGemTypeCap(gem.getGemType(), socketIndex)) return false;
 		if(this.sockets.get(socketIndex).setGem(gem, false)) {
 			this.refreshCombinations();
 			return true;
