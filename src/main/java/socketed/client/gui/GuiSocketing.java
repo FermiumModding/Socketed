@@ -82,8 +82,8 @@ public class GuiSocketing extends GuiContainer {
     
     protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         String s = I18n.format("socketed.socketinggui.displayname");
-        this.fontRenderer.drawString(s, 8, 6, 4210752);
-        this.fontRenderer.drawString(this.playerInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 4210752);
+        this.fontRenderer.drawStringWithShadow(s, 8, 8, 0xE0E0E0);
+        this.fontRenderer.drawStringWithShadow(this.playerInventory.getDisplayName().getUnformattedText(), 8, this.ySize - 96 + 2, 0xE0E0E0);
 
         ItemStack socketable = this.inventorySlots.getSlot(0).getStack();
         if(!socketable.isEmpty()) {
